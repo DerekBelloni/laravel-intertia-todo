@@ -21,6 +21,11 @@
         "vue": "^3.2.41"
     },
     "dependencies": {
+        "@fortawesome/fontawesome": "^1.1.8",
+        "@fortawesome/fontawesome-free-brands": "^5.0.13",
+        "@fortawesome/fontawesome-free-solid": "^5.0.13",
+        "@fortawesome/vue-fontawesome": "^3.0.3",
+        "@heroicons/vue": "^2.0.16",
         "@inertiajs/vue3": "^1.0.2"
     }
 }
