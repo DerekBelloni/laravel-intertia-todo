@@ -39,6 +39,8 @@ Route::middleware('auth')->group(function () {
 // WorkChecklist
 Route::middleware('auth')->group(function () {
     Route::get('/WorkChecklist', [WorkChecklistController::class, 'index']);
+    Route::post('/WorkChecklist/Store', [WorkChecklistController::class, 'store']);
+    Route::post('/WorkChecklist/Update', [WorkChecklistController::class, 'update']);
 });
 
 require __DIR__.'/auth.php';

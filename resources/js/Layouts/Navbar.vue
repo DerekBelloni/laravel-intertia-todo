@@ -19,6 +19,12 @@
   import { Link } from '@inertiajs/inertia-vue3'
   import SidePanel from '@/Layouts/SidePanel.vue';
   import { FireIcon } from '@heroicons/vue/24/solid';
+
+  defineProps({
+  tasks: {
+    type: Array
+  }
+});
 </script>
 
 <style>

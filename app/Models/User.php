@@ -40,6 +40,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'task_completed' => 'Boolean'
     ];
 
     // create relationships to grab users checklist data
