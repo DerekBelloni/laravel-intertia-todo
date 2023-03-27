@@ -7,7 +7,9 @@ class WorkCheckList extends Model {
   
   protected $table = 'work_checklists';
   protected $guarded = [];
-  protected $casts = [];
+  protected $casts = [
+    'task_completed' => 'boolean'
+  ];
 
   // create relationship with user
 

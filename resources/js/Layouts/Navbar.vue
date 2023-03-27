@@ -1,5 +1,5 @@
 <template>
-  <div id="navbar" class="bg-teal-300">
+  <div id="navbar" class="bg-teal-200">
     <div class="mx-4 pb-2 pt-4 flex flex-row space-x-12 items-center">
       <FireIcon class="w-6 h-6 text-white"></FireIcon>
      <span class="font-semibold text-white text-lg">Laravel Inertia Todo</span>
