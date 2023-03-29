@@ -5,7 +5,6 @@ const emit = defineEmits(['update:checked']);
 
 const props = defineProps({
     checked: {
-        // type: [Array, Boolean],
         type: Boolean,
         required: false,
     },
@@ -16,13 +15,10 @@ const props = defineProps({
 
 const proxyChecked = computed({
     get() {
-        console.log('child component get: ', props.checked);
         return props.checked;
     },
 
     set(val) {
-        // val = !val;
-        console.log('child component set: ', val);
         emit('update:checked', val);
     },
 });
@@ -30,9 +26,16 @@ const proxyChecked = computed({
 
 <template>
     <input
+        id="custom-checkbox"
         type="checkbox"
         :value="value"
         v-model="proxyChecked"
         class="rounded border-gray-300 text-teal-300 shadow-sm focus:ring-teal-100"
     />
 </template>
+
+<style>
+    #custom-checkbox {
+        border-radius: 50%;
+    }
+</style>

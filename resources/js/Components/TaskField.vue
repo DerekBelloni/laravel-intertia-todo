@@ -1,6 +1,6 @@
 <template v-if="">
   <form form @submit.prevent="saveTask()">
-    <textarea v-model="task" class="rounded" rows="5" cols="55" placeholder="Create a task..."></textarea>
+    <textarea v-model="task" class="rounded" rows="2" cols="55" placeholder="Create a task..."></textarea>
     <div class="flex justify-end ml-3">
       <Button>Submit</Button>
     </div>
