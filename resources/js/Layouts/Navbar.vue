@@ -1,10 +1,11 @@
 <template>
+  <div class="bg-white">
   <div id="navbar" class="bg-teal-300">
     <div class="ml-4 pb-2 pt-4 flex flex-row space-x-2 items-center">
       <FireIcon class="w-6 h-6 text-white"></FireIcon>
-      <Bars3Icon class="h-6 w-6 text-white cursor-pointer"></Bars3Icon>
+      <a @click="toggleSidePanel()"><Bars3Icon class="h-6 w-6 text-white cursor-pointer"></Bars3Icon></a>
       <div class="mr-6">
-        <input id="custom-searchbar" placeholder="Search..." class="rounded h-6 palceholder:text-white  focus:ring-teal-200" type="search">
+        <input id="custom-searchbar" placeholder="Search..." class="rounded h-6 placeholder:text-white  focus:ring-teal-200" type="search">
       </div>
   
      <div class="flex space-x-8">
@@ -13,28 +14,57 @@
         <Link href="/" class="font-semibold text-white">Archive</Link>
      </div>
     </div>
-    <SidePanel></SidePanel>
+      <SidePanel v-if="toggled"></SidePanel>
   </div>
   <slot></slot>
+</div>
 </template>
 
-<script setup>
+<script>
   import { Link } from '@inertiajs/inertia-vue3'
   import SidePanel from '@/Layouts/SidePanel.vue';
   import { FireIcon } from '@heroicons/vue/24/solid';
   import { Bars3Icon } from '@heroicons/vue/24/solid';
   import { MagnifyingGlassIcon } from '@heroicons/vue/24/solid';
+  import {ref} from 'vue';
 
-  defineProps({
-  tasks: {
-    type: Array
+  export default {
+    props: {
+      tasks: {
+        type: Array
+      }
+    },
+    components: {
+      Link,
+      SidePanel,
+      FireIcon,
+      Bars3Icon,
+      MagnifyingGlassIcon
+    },
+    setup(props) {
+      let toggled = ref(false);
+
+      function toggleSidePanel() {
+        toggled.value = !toggled.value;
+      }
+
+      return {
+        Link,
+        SidePanel,
+        FireIcon,
+        Bars3Icon,
+        MagnifyingGlassIcon,
+        toggleSidePanel,
+        toggled
+      }
+    }
   }
-});
 </script>
 
 <style>
   #navbar {
-    height: 52px;
+    height: 48px;
+    opacity: .75;
     
   }
 

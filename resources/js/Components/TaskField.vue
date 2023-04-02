@@ -1,8 +1,13 @@
-<template v-if="">
-  <form form @submit.prevent="saveTask()">
-    <textarea v-model="task" class="rounded" rows="2" cols="55" placeholder="Create a task..."></textarea>
-    <div class="flex justify-end ml-3">
-      <Button>Submit</Button>
+<template>
+  <form form @submit.prevent="saveTask()" class="mb-12">
+    <div class="grid grid-cols-8">
+      <div class="grid col-span-4">
+        <textarea v-model="task"  class="textarea border border-gray-200 bg-white" rows="2" cols="55" placeholder="Create a task..." ></textarea>
+        <div class="flex justify-end ml-3 mt-4">
+          <!-- <Button>Submit</Button> -->
+          <a @click.prevent="saveTask()"><label class="btn btn-outline btn-ghost btn-xs">Submit</label></a>
+        </div>
+      </div>
     </div>
   </form>
 </template>
@@ -11,13 +16,13 @@
 import { Inertia } from "@inertiajs/inertia";
 import Button from "@/Components/Button.vue";
 
-  let task = '';
+let task = '';
 
-  function saveTask() {
-    let params = {
+function saveTask() {
+  let params = {
       task_body: task
-    }
-
-    Inertia.post('/WorkChecklist/Store', params);
   }
+
+  Inertia.post('/WorkChecklist/Store', params);
+}
 </script>

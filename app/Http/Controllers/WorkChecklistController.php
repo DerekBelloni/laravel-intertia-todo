@@ -37,15 +37,13 @@ class WorkChecklistController extends Controller
       foreach($work_tasks as $task) {
          WorkCheckList::where('id', $task['id'])
             ->update([
-               'task_completed' => $task['task_completed']
+               'task_completed' => $task["task_completed"]
             ]);
       }
    }
 
    public function delete(Request $request) {
-      // dd($request->all);
       $work_task_id = $request->input('task_id');
-      // dd($work_task_id);
       WorkCheckList::where('id', $work_task_id)->delete();
    }
 }

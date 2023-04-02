@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\ArchivedTaskController;
+use App\Http\Controllers\ArchiveTaskController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WorkChecklistController;
 use Illuminate\Foundation\Application;
@@ -42,6 +44,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/WorkChecklist/Store', [WorkChecklistController::class, 'store']);
     Route::post('/WorkChecklist/Update', [WorkChecklistController::class, 'update']);
     Route::post('/WorkChecklist/Delete', [WorkChecklistController::class, 'delete']);
+});
+
+//Archived Task
+Route::middleware('auth')->group(function () {
+    Route::post('/ArchivedTask/Store', [ArchivedTaskController::class, 'store']);
 });
 
 require __DIR__.'/auth.php';
