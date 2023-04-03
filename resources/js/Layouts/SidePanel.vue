@@ -1,20 +1,20 @@
 <template>
   <div id="side-panel" class="bg-gray-50 space-y-12">
-    <div class="flex flex-col ml-8 space-y-3">
-      <div class="flex flex-row space-x-2">
+    <div class="flex flex-col ml-8 space-y-1">
+      <div class="flex flex-row space-x-2 hover:bg-gray-200 px-2 py-1 mr-4 rounded">
         <InboxArrowDownIcon class="h-6 w-6 text-sky-400 opacity-50"></InboxArrowDownIcon>
         <span class="font-normalt text-gray-600">Inbox</span>
       </div>
-      <div class="flex flex-row space-x-2">
+      <div class="flex flex-row space-x-2 hover:bg-gray-200 px-2 py-1 mr-4 rounded">
         <CalendarDaysIcon class="h-6 w-6 text-lime-400"></CalendarDaysIcon>
         <span class="font-normal text-gray-600">Today</span>
       </div>
-      <div class="flex flex-row space-x-2">
+      <div class="flex flex-row space-x-2 hover:bg-gray-200 px-2 py-1 mr-4 rounded">
         <BellIcon class="h-6 w-6 text-rose-400 opacity-75"></BellIcon>
       <span class="font-normal text-gray-600">Upcoming</span>
       </div>
     </div>
-    <div class="flex flex-col ml-8 space-y-3 font-medium">
+    <div class="flex flex-col ml-12 space-y-3 font-medium">
       <div>
         <span class="text-gray-600 font-semibold">Projects</span>
       </div>

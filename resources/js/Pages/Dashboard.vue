@@ -3,7 +3,9 @@ import Navbar from '@/Layouts/Navbar.vue';
 </script>
 
 <template>
- <Navbar>
-
- </Navbar>
+  <div class="bg-white">
+    <Navbar>
+      <span>Hello World</span>
+    </Navbar>
+  </div>
 </template>

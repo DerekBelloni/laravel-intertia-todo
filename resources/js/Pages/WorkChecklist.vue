@@ -1,4 +1,5 @@
 <template>
+  <div class="bg-white">
   <Navbar>
     <div id="task-container" class="container mx-auto bg-white">
       <div class="flex justify-center">
@@ -26,6 +27,7 @@
       </div>
     </div>
   </Navbar>
+</div>
 </template>
 
 

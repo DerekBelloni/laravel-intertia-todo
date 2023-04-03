@@ -14,8 +14,8 @@
           <span class="text-xs">{{ task.created_at }}</span>
         </div>
         <div class="flex justify-end mt-10 text-xs items-center space-x-2 pr-3 hover:bg-gray-300 hover:rounded hover:px-1 hover:py-1 hover:text-white">
-          <label for="my-modal-5" class="btn btn-ghost hover:bg-gray-400 btn-xs">Edit Task</label>
-          <a :class="task.task_completed ? 'cursor-pointer' : 'cursor-pointer pr-2'" @click="archiveTask(task)"><span >Archive Task</span></a>
+          <label for="my-modal-5"><PencilSquareIcon class="h-6 w-6 hover:bg-gray-400 rounded px-1"></PencilSquareIcon></label>
+          <a class="hover:bg-gray-400 px-1 rounded" :class="task.task_completed ? 'cursor-pointer font-medium' : 'cursor-pointer pr-2 font-medium'" @click="archiveTask(task)"><span >Archive Task</span></a>
           <div class="flex justify-end" v-if="task.task_completed">
           <a @click="deleteTask(task)"><XCircleIcon class="h-6 w-6 text-gray-200 cursor-pointer hover:text-red-500 flex" ></XCircleIcon></a>
         </div>
@@ -27,10 +27,10 @@
         <div class="modal-box w-11/12 max-w-3xl bg-white">
           <h3 class="font-bold text-lg">Edit Task</h3>
           <div class="mt-2 flex justify-center">
-            <textarea id="modal-taskfield" class="textarea border border-gray-200 bg-white" rows="2" cols="55" placeholder="Create a task..." ></textarea>
+            <textarea id="modal-taskfield" v-model="task.checklist_item_body" class="textarea border border-gray-200 bg-white" rows="2" cols="55" placeholder="Create a task..." ></textarea>
           </div>
           <div class="modal-action">
-            <label for="my-modal-5" class="btn btn-outline btn-xs" @click="">Submit</label>
+            <label for="my-modal-5" class="btn btn-outline btn-xs" @click="saveTask(task)">Submit</label>
           </div>
         </div>
       </div>
@@ -40,6 +40,8 @@
 
 <script>
 import { BriefcaseIcon } from '@heroicons/vue/24/solid';
+import { BookmarkSquareIcon } from '@heroicons/vue/24/solid';
+import { PencilSquareIcon } from '@heroicons/vue/24/solid';
 import { XCircleIcon } from '@heroicons/vue/24/solid';
 import Navbar from '@/Layouts/Navbar.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
@@ -63,8 +65,10 @@ export default {
     Checkbox,
     Button,
     BriefcaseIcon,
-    XCircleIcon
-  },
+    XCircleIcon,
+    PencilSquareIcon,
+    BookmarkSquareIcon
+},
   setup(props) {
     let toggleTask = ref(false);
     let checked = ref(false);
@@ -115,16 +119,18 @@ export default {
     }
 
     function archiveTask(task) {
+      // consider using a Set, doesn't allow duplicate values
       console.log('task: ', task);
       let params = task;
       router.post('/ArchivedTask/Store', params);
     }
 
-    function saveTask() {
-      let params = {
-          task_body: task
-      }
-      Inertia.post('/WorkChecklist/Store', params);
+    function saveTask(task) {
+      console.log('save task coming from modal: ', task)
+      // let params = {
+      //     task_body: task
+      // }
+      // Inertia.post('/WorkChecklist/Store', params);
     }
 
     return {
@@ -138,7 +144,8 @@ export default {
       deleteTask,
       archiveTask,
       isActive,
-      taskBody
+      taskBody,
+      saveTask
     }
   }
 }
@@ -147,5 +154,9 @@ export default {
 <style>
   #modal-taskfield {
     width: 600px;
+  }
+
+  textarea {
+    resize: none;
   }
 </style>

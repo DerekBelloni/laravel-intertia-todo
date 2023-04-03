@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white">
+  <div class="bg-white min-h-screen">
   <div id="navbar" class="bg-teal-300">
     <div class="ml-4 pb-2 pt-4 flex flex-row space-x-2 items-center">
       <FireIcon class="w-6 h-6 text-white"></FireIcon>

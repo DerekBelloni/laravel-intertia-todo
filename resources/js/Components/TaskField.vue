@@ -1,8 +1,8 @@
 <template>
   <form form @submit.prevent="saveTask()" class="mb-12">
     <div class="grid grid-cols-8">
-      <div class="grid col-span-4">
-        <textarea v-model="task"  class="textarea border border-gray-200 bg-white" rows="2" cols="55" placeholder="Create a task..." ></textarea>
+      <div class="grid col-span-8">
+        <textarea v-model="task"  class="textarea focus:ring-teal-200 border border-gray-200 bg-white" rows="5" cols="55" placeholder="Create a task..." ></textarea>
         <div class="flex justify-end ml-3 mt-4">
           <!-- <Button>Submit</Button> -->
           <a @click.prevent="saveTask()"><label class="btn btn-outline btn-ghost btn-xs">Submit</label></a>
