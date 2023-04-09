@@ -9,3 +9,9 @@ import Navbar from '@/Layouts/Navbar.vue';
     </Navbar>
   </div>
 </template>
+
+<style>
+  template {
+    background-color: white;
+  }
+</style>

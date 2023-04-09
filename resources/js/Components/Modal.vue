@@ -1,98 +1,123 @@
-<script setup>
-import { computed, onMounted, onUnmounted, watch } from 'vue';
+<template>
+  <div class="modal-backdrop">
+    <div id="modal-body" class="rounded-xl max-w-4xl">
+      <header class="border border-gray-200 border-b h-14 modal-header">
+        <slot name="header">
+          <div class="flex justify-end">
+            <button @click="$emit('toggleModal')">
+              <XMarkIcon class="h-5 w-5 text-gray-300 hover:bg-gray-200 hover:text-white rounded-full hover:shadow-xl"></XMarkIcon>
+            </button>
+          </div>
+        </slot>
+      </header>
 
-const props = defineProps({
-    show: {
-        type: Boolean,
-        default: false,
+      <section class="mt-10">
+        <slot name="body">
+          <!--Grid-->
+          <div class="grid grid-cols-12">
+            <!-- <div class="flex flex-col justify-start mt-2 ml-12 mr-10 pb-2"> -->
+            <div class=" mt-2 ml-12 mr-10 pb-2 col-span-8 ">
+              <div class="flex flex-row items-center">
+                <Checkbox class="h-4 w-4"></Checkbox>
+                <div class="ml-6">
+                  <span class="text-xl font-medium">{{ activeTask.checklist_title }}</span>
+                </div>
+              </div>
+              <div class="mt-4 ml-12 text-gray-400 text-sm font-thin">
+                <span>{{ activeTask.checklist_item_body }}</span>
+              </div>
+              <div class="mt-4 text-xs ml-10 text-gray-500 font-medium">
+                <a class="cursor-pointer hover:bg-gray-300 rounded px-2 py-1" @click="toggleSubTaskField()"><span>+ Add sub-task</span></a>
+              </div>
+              <div v-if="toggleSubTask == true" class="mt-4 mx-10">
+                <TaskField></TaskField>
+              </div>
+            </div>
+          </div>
+        </slot>
+      </section>
+
+      <footer class="modal-footer flex justify-end mr-6">
+        <slot name="footer">
+        </slot>
+      </footer>
+    </div>
+  </div>
+</template>
+
+<script>
+import { XMarkIcon, xMarkIcon } from '@heroicons/vue/24/solid';
+import Checkbox from '@/Components/Checkbox.vue';
+import TaskField from '@/Components/TaskField.vue';
+import {reactive, onMounted, toRefs, ref} from 'vue';
+export default {
+  props: {
+    isModalVisible: {
+      type: Boolean,
+      required: false
     },
-    maxWidth: {
-        type: String,
-        default: '2xl',
-    },
-    closeable: {
-        type: Boolean,
-        default: true,
-    },
-});
-
-const emit = defineEmits(['close']);
-
-watch(
-    () => props.show,
-    () => {
-        if (props.show) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = null;
-        }
+    task: {
+      type: Object,
+      required: false
     }
-);
+  },
+  components: {
+    xMarkIcon,
+    XMarkIcon,
+    Checkbox,
+    TaskField
+},
+  setup(props) {
+    let activeTask = reactive(props.task);
+    let toggleSubTask = ref(false);
 
-const close = () => {
-    if (props.closeable) {
-        emit('close');
+    function toggleSubTaskField() {
+      console.log('banana');
+      toggleSubTask.value = !toggleSubTask.value;
     }
-};
 
-const closeOnEscape = (e) => {
-    if (e.key === 'Escape' && props.show) {
-        close();
-    }
-};
-
-onMounted(() => document.addEventListener('keydown', closeOnEscape));
-
-onUnmounted(() => {
-    document.removeEventListener('keydown', closeOnEscape);
-    document.body.style.overflow = null;
-});
-
-const maxWidthClass = computed(() => {
     return {
-        sm: 'sm:max-w-sm',
-        md: 'sm:max-w-md',
-        lg: 'sm:max-w-lg',
-        xl: 'sm:max-w-xl',
-        '2xl': 'sm:max-w-2xl',
-    }[props.maxWidth];
-});
+      activeTask,
+      toggleSubTaskField,
+      toggleSubTask
+    }
+  }
+  
+}
 </script>
 
-<template>
-    <teleport to="body">
-        <transition leave-active-class="duration-200">
-            <div v-show="show" class="fixed inset-0 overflow-y-auto px-4 py-6 sm:px-0 z-50" scroll-region>
-                <transition
-                    enter-active-class="ease-out duration-300"
-                    enter-from-class="opacity-0"
-                    enter-to-class="opacity-100"
-                    leave-active-class="ease-in duration-200"
-                    leave-from-class="opacity-100"
-                    leave-to-class="opacity-0"
-                >
-                    <div v-show="show" class="fixed inset-0 transform transition-all" @click="close">
-                        <div class="absolute inset-0 bg-gray-500 opacity-75" />
-                    </div>
-                </transition>
+<style>
+  .modal-backdrop {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
-                <transition
-                    enter-active-class="ease-out duration-300"
-                    enter-from-class="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                    enter-to-class="opacity-100 translate-y-0 sm:scale-100"
-                    leave-active-class="ease-in duration-200"
-                    leave-from-class="opacity-100 translate-y-0 sm:scale-100"
-                    leave-to-class="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                >
-                    <div
-                        v-show="show"
-                        class="mb-6 bg-white rounded-lg overflow-hidden shadow-xl transform transition-all sm:w-full sm:mx-auto"
-                        :class="maxWidthClass"
-                    >
-                        <slot v-if="show" />
-                    </div>
-                </transition>
-            </div>
-        </transition>
-    </teleport>
-</template>
+  #modal-body {
+    background: #FFFFFF;
+    overflow-x: auto;
+    display: flex;
+    flex-direction: column;
+    min-height: 625px;
+    min-width: 890px;
+  }
+
+  .modal-header,
+  .modal-footer {
+    padding: 15px;
+    /* display: flex; */
+  }
+  
+  .btn-green {
+    color: white;
+    background: #4AAE9B;
+    border: 1px solid #4AAE9B;
+    border-radius: 2px;
+  }
+</style>

@@ -11,7 +11,7 @@
                 <span class="font-semibold ml-4 text-gray-600">Work</span>
                 <BriefcaseIcon class="h-6 w-6 text-teal-200"></BriefcaseIcon>
               </div>
-              <Task :tasks="tasks"></Task>
+              <Task :task="task" v-for="task in tasks"></Task>
               <div class="mt-2 ml-6">
                 <a class="rounded p-1 cursor-pointer font-semibold text-gray-400 hover:text-teal-200" @click="toggleTaskField()">Add Task +</a>
               </div>
@@ -40,7 +40,7 @@ import TaskField from '@/Components/TaskField.vue';
 import Checkbox from '@/Components/Checkbox.vue';
 import Button from '@/Components/Button.vue';
 import Task from '@/Components/Task.vue';
-import { ref, defineProps, onMounted } from 'vue';
+import { ref, defineProps, onMounted, reactive } from 'vue';
 import { Inertia } from "@inertiajs/inertia";
 import { router } from '@inertiajs/vue3';
 export default {
@@ -65,12 +65,12 @@ export default {
     let toggleTask = ref(false);
     let checked = ref(false);
     let completedTasks = [];
-    let workTasks = ref([]);
+    let workTasks = reactive([]);
     let value = null;
 
     // lifecycle hooks
     onMounted(() => {
-      workTasks.value = props.tasks;
+      workTasks = props.tasks;
     })
 
     // functions -- try moving these outside the setup function
@@ -107,7 +107,6 @@ export default {
     }
 
     function archiveTask(task) {
-      console.log('task: ', task);
       let params = task;
       router.post('/ArchivedTask/Store', params);
     }
