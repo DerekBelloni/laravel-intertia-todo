@@ -3,7 +3,7 @@
   <div class="flex flex-col border-t border-gray-200 py-2 px-2">
       <div>
         <div class="flex justify-start">
-          <Checkbox :checked="activeTask.task_completed" :value="value"  @update:checked="toggleTaskComplete(activeTask.id, $event)"></Checkbox>
+          <Checkbox :checked="activeTask.task_completed" :value="value"  @update:checked="toggleTaskComplete($event)"></Checkbox>
           <div class="ml-4">
             <span class="flex font-thin  decoration-zinc-400	text-sm" :class="activeTask.task_completed ? 'line-through' : ''">{{ activeTask.checklist_item_body }}</span>
           </div>
@@ -70,41 +70,17 @@ export default {
     let isModalVisible = ref(false);
     let activeTask = reactive(props.task);
 
-    
-
-
-    // onMounted(() => {
-    //   console.log('mounted: ', props.task)
-    //   activeTask = props.task;
-    //   console.log(activeTask.id);
-    // })
 
     // functions -- try moving these outside the setup function
     function toggleTaskField() {
       toggleTask.value = !toggleTask.value;
     }
 
-
     // figure out how to preserve scroll position when you toggle
     // task complete
-    function toggleTaskComplete(task_id, $event){
-      console.log('task id: ', task_id);
-      console.log('active task, in task: ', activeTask.task_completed);
-      console.log('event: ', $event)
-      let taskChecked = {};
-      taskChecked.task_id = task_id;
-      taskChecked.task_completed = $event;
-
+    function toggleTaskComplete($event){
       activeTask.task_completed = $event;
-      console.log('active task after setting event: ', activeTask.task_completed);
 
-      // for (let i = 0; i < this.workTasks.length; i++) {
-      //   if (this.workTasks[i].id == taskChecked.task_id) {
-      //     this.workTasks[i].task_completed = taskChecked.task_completed
-      //   }
-      // }
-
-      // let params = this.workTasks;
       let params = activeTask;
       router.post('/WorkChecklist/Update' , params);
     }

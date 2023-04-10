@@ -48,4 +48,5 @@ import { Link } from '@inertiajs/vue3';
     min-height: 100vh;
     max-width: 200px;
   }
+
 </style>

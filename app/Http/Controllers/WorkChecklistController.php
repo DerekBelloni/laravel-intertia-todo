@@ -12,9 +12,10 @@ class WorkChecklistController extends Controller
 {
    public function index(Request $request)
    {
-      $tasks = WorkCheckList::where('user_id', Auth()->id())
-         ->get();
+      $tasks = WorkCheckList::with('subTasks')->where('user_id', Auth()->id())
+         ->get(); 
 
+      // dd($tasks);
       return Inertia::render('WorkChecklist', [
          "tasks" => $tasks
       ]);

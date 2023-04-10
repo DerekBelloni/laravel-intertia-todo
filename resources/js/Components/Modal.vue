@@ -15,7 +15,6 @@
         <slot name="body">
           <!--Grid-->
           <div class="grid grid-cols-12">
-            <!-- <div class="flex flex-col justify-start mt-2 ml-12 mr-10 pb-2"> -->
             <div class=" mt-2 ml-12 mr-10 pb-2 col-span-8 ">
               <div class="flex flex-row items-center">
                 <Checkbox class="h-4 w-4"></Checkbox>
@@ -23,14 +22,19 @@
                   <span class="text-xl font-medium">{{ activeTask.checklist_title }}</span>
                 </div>
               </div>
-              <div class="mt-4 ml-12 text-gray-400 text-sm font-thin">
+              <div class="mt-4 ml-12 text-gray-400 text-md font-thin">
                 <span>{{ activeTask.checklist_item_body }}</span>
+              </div>
+              <div class="ml-14 text-xs font-medium">
+                <ul v-for="subTask in activeTask.sub_tasks">
+                  <li>- {{ subTask.subtask_body }}</li>
+                </ul>
               </div>
               <div class="mt-4 text-xs ml-10 text-gray-500 font-medium">
                 <a class="cursor-pointer hover:bg-gray-300 rounded px-2 py-1" @click="toggleSubTaskField()"><span>+ Add sub-task</span></a>
               </div>
-              <div v-if="toggleSubTask == true" class="mt-4 mx-10">
-                <TaskField></TaskField>
+              <div v-if="toggleSubTask == true" class="mt-2 mx-10" >
+                <TaskField @saveTask="saveTask"></TaskField>
               </div>
             </div>
           </div>
@@ -50,6 +54,8 @@ import { XMarkIcon, xMarkIcon } from '@heroicons/vue/24/solid';
 import Checkbox from '@/Components/Checkbox.vue';
 import TaskField from '@/Components/TaskField.vue';
 import {reactive, onMounted, toRefs, ref} from 'vue';
+import { Inertia } from "@inertiajs/inertia";
+import axios from "axios";
 export default {
   props: {
     isModalVisible: {
@@ -71,15 +77,30 @@ export default {
     let activeTask = reactive(props.task);
     let toggleSubTask = ref(false);
 
+    onMounted(() => {
+      console.log(activeTask.sub_tasks);
+    })
+    // get all existing subtasks for the active task when modal is opened
+    // on mounted, make an api call
+    function saveTask(taskBody) {
+      console.log('modal component, save task: ', taskBody);
+      let params = {
+          parent_task_id: activeTask.id,
+          task_body: taskBody,
+          subtask_type: 'work'
+      }
+      Inertia.post('/Subtask/Store', params);
+    }
+
     function toggleSubTaskField() {
-      console.log('banana');
       toggleSubTask.value = !toggleSubTask.value;
     }
 
     return {
       activeTask,
       toggleSubTaskField,
-      toggleSubTask
+      toggleSubTask,
+      saveTask
     }
   }
   

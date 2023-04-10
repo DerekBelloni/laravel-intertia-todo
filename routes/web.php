@@ -1,8 +1,8 @@
 <?php
 
 use App\Http\Controllers\ArchivedTaskController;
-use App\Http\Controllers\ArchiveTaskController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SubTaskController;
 use App\Http\Controllers\WorkChecklistController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -45,6 +45,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/WorkChecklist/Store', [WorkChecklistController::class, 'store']);
     Route::post('/WorkChecklist/Update', [WorkChecklistController::class, 'update']);
     Route::post('/WorkChecklist/Delete', [WorkChecklistController::class, 'delete']);
+});
+
+// Sub-tasks
+Route::middleware('auth')->group(function () {
+    Route::post('/Subtask/Store', [SubTaskController::class, 'store']);
 });
 
 //Archived Task

@@ -17,7 +17,7 @@
               </div>
               <template v-if="toggleTask == true">
                 <div class="mt-4 ml-6">
-                <TaskField></TaskField>
+                <TaskField @saveTask="saveTaskTwo"></TaskField>
                 </div>
               </template>
             </div>
@@ -37,10 +37,9 @@ import { XCircleIcon } from '@heroicons/vue/24/solid';
 import Navbar from '@/Layouts/Navbar.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TaskField from '@/Components/TaskField.vue';
-import Checkbox from '@/Components/Checkbox.vue';
 import Button from '@/Components/Button.vue';
 import Task from '@/Components/Task.vue';
-import { ref, defineProps, onMounted, reactive } from 'vue';
+import { ref, onMounted, reactive } from 'vue';
 import { Inertia } from "@inertiajs/inertia";
 import { router } from '@inertiajs/vue3';
 export default {
@@ -54,7 +53,6 @@ export default {
     Navbar,
     PrimaryButton,
     TaskField,
-    // Checkbox,
     Button,
     BriefcaseIcon,
     XCircleIcon,
@@ -111,6 +109,14 @@ export default {
       router.post('/ArchivedTask/Store', params);
     }
 
+    function saveTaskTwo(taskBody) {
+      let params = {
+          task_body: taskBody
+      }
+  
+      Inertia.post('/WorkChecklist/Store', params);
+    }
+
     return {
       workTasks,
       toggleTask,
@@ -120,7 +126,8 @@ export default {
       toggleTaskField,
       toggleTaskComplete,
       deleteTask,
-      archiveTask
+      archiveTask,
+      saveTaskTwo
     }
   }
 }

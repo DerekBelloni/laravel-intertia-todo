@@ -15,6 +15,7 @@
      </div>
     </div>
       <SidePanel v-if="toggled"></SidePanel>
+      <!-- <SidePanelTwo></SidePanelTwo> -->
   </div>
   <slot></slot>
 </div>
@@ -23,6 +24,7 @@
 <script>
   import { Link } from '@inertiajs/inertia-vue3'
   import SidePanel from '@/Layouts/SidePanel.vue';
+  import SidePanelTwo from '@/Layouts/SidePanelTwo.vue';
   import { FireIcon } from '@heroicons/vue/24/solid';
   import { Bars3Icon } from '@heroicons/vue/24/solid';
   import { MagnifyingGlassIcon } from '@heroicons/vue/24/solid';
@@ -39,7 +41,8 @@
       SidePanel,
       FireIcon,
       Bars3Icon,
-      MagnifyingGlassIcon
+      MagnifyingGlassIcon,
+      SidePanelTwo
     },
     setup(props) {
       let toggled = ref(false);

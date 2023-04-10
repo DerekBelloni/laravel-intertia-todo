@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\SubTask;
 
 class WorkCheckList extends Model {
   
@@ -14,5 +15,11 @@ class WorkCheckList extends Model {
   ];
 
   // create relationship with user
+
+  // Relationships
+  public function subTasks()
+  {
+    return $this->hasMany(SubTask::class, 'parent_task_id', 'id');
+  }
 
 }
