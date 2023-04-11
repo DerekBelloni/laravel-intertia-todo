@@ -18,4 +18,13 @@ class SubTaskController extends Controller
       'subtask_body' => $subtask['task_body']
     ]);
   }
+
+  public function update(Request $request)
+  {
+    $subtask = $request->all();
+
+    SubTask::where('id', $subtask['id'])->update([
+      'subtask_completed' => $subtask['task_completed']
+    ]);
+  }
 }

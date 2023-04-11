@@ -17,21 +17,24 @@
           <div class="grid grid-cols-12">
             <div class=" mt-2 ml-12 mr-10 pb-2 col-span-8 ">
               <div class="flex flex-row items-center">
-                <Checkbox class="h-4 w-4"></Checkbox>
+                <Checkbox :checked="activeTask.task_completed" class="h-4 w-4" @update:checked="toggleTaskComplete($event)"></Checkbox>
                 <div class="ml-6">
-                  <span class="text-xl font-medium">{{ activeTask.checklist_title }}</span>
+                  <span class="text-xl font-thin" :class="activeTask.task_completed ? 'line-through' : ''">{{ activeTask.checklist_title }}</span>
                 </div>
               </div>
-              <div class="mt-4 ml-12 text-gray-400 text-md font-thin">
+              <div class="mt-2 ml-10 text-gray-400 text-md font-thin"  :class="activeTask.task_completed ? 'line-through' : ''">
                 <span>{{ activeTask.checklist_item_body }}</span>
               </div>
-              <div class="ml-14 text-xs font-medium">
+              <div class="ml-12 text-sm font-medium">
                 <ul v-for="subTask in activeTask.sub_tasks">
-                  <li>- {{ subTask.subtask_body }}</li>
+                  <div class="flex flex-row items-center">
+                    <SmallCheckbox :checked="subTask.task_completed" @update:small-checked="toggleSubTaskComplete($event, subTask)"></SmallCheckbox>
+                    <li class="pl-2">{{ subTask.subtask_body }}</li>
+                  </div>
                 </ul>
               </div>
               <div class="mt-4 text-xs ml-10 text-gray-500 font-medium">
-                <a class="cursor-pointer hover:bg-gray-300 rounded px-2 py-1" @click="toggleSubTaskField()"><span>+ Add sub-task</span></a>
+                <a class="cursor-pointer hover:bg-gray-300 rounded px-2 py-1" @click="toggleSubTaskField($event)"><span>+ Add sub-task</span></a>
               </div>
               <div v-if="toggleSubTask == true" class="mt-2 mx-10" >
                 <TaskField @saveTask="saveTask"></TaskField>
@@ -52,10 +55,11 @@
 <script>
 import { XMarkIcon, xMarkIcon } from '@heroicons/vue/24/solid';
 import Checkbox from '@/Components/Checkbox.vue';
+import SmallCheckbox from '@/Components/SmallCheckbox.vue';
 import TaskField from '@/Components/TaskField.vue';
 import {reactive, onMounted, toRefs, ref} from 'vue';
 import { Inertia } from "@inertiajs/inertia";
-import axios from "axios";
+import { router } from '@inertiajs/vue3';
 export default {
   props: {
     isModalVisible: {
@@ -71,17 +75,13 @@ export default {
     xMarkIcon,
     XMarkIcon,
     Checkbox,
-    TaskField
+    TaskField,
+    SmallCheckbox
 },
   setup(props) {
     let activeTask = reactive(props.task);
     let toggleSubTask = ref(false);
 
-    onMounted(() => {
-      console.log(activeTask.sub_tasks);
-    })
-    // get all existing subtasks for the active task when modal is opened
-    // on mounted, make an api call
     function saveTask(taskBody) {
       console.log('modal component, save task: ', taskBody);
       let params = {
@@ -96,11 +96,27 @@ export default {
       toggleSubTask.value = !toggleSubTask.value;
     }
 
+    function toggleSubTaskComplete($event, subTask) {
+      subTask.task_completed = $event;
+
+      let params = subTask
+      router.post('/Subtask/Update', params);
+    }
+
+    function toggleTaskComplete($event) {
+      activeTask.task_completed = $event;
+
+      let params = activeTask;
+      router.post('/WorkChecklist/Update' , params);
+    }
+
     return {
       activeTask,
       toggleSubTaskField,
       toggleSubTask,
-      saveTask
+      toggleTaskComplete,
+      saveTask,
+      toggleSubTaskComplete
     }
   }
   

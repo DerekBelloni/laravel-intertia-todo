@@ -50,6 +50,7 @@ Route::middleware('auth')->group(function () {
 // Sub-tasks
 Route::middleware('auth')->group(function () {
     Route::post('/Subtask/Store', [SubTaskController::class, 'store']);
+    Route::post('/Subtask/Update', [SubTaskController::class, 'update']);
 });
 
 //Archived Task
