@@ -27,9 +27,14 @@
               </div>
               <div class="ml-12 text-sm font-medium">
                 <ul v-for="subTask in activeTask.sub_tasks">
-                  <div class="flex flex-row items-center">
-                    <SmallCheckbox :checked="subTask.task_completed" @update:small-checked="toggleSubTaskComplete($event, subTask)"></SmallCheckbox>
-                    <li class="pl-2">{{ subTask.subtask_body }}</li>
+                  <div class="flex flex-row items-center justify-between">
+                    <div class="flex items-center">
+                      <SmallCheckbox :checked="subTask.subtask_completed" @update:small-checked="toggleSubTaskComplete($event, subTask)"></SmallCheckbox>
+                      <li class="pl-2" :class="subTask.subtask_completed ? 'line-through' : ''">{{ subTask.subtask_body }}</li>
+                    </div>
+                    <div>
+                      <XCircleIcon class="h-3 w-3 hover:text-red-500" @click="deleteSubTask(subTask)"></XCircleIcon>
+                    </div>
                   </div>
                 </ul>
               </div>
@@ -54,6 +59,7 @@
 
 <script>
 import { XMarkIcon, xMarkIcon } from '@heroicons/vue/24/solid';
+import { XCircleIcon } from '@heroicons/vue/24/solid';
 import Checkbox from '@/Components/Checkbox.vue';
 import SmallCheckbox from '@/Components/SmallCheckbox.vue';
 import TaskField from '@/Components/TaskField.vue';
@@ -76,14 +82,31 @@ export default {
     XMarkIcon,
     Checkbox,
     TaskField,
-    SmallCheckbox
+    SmallCheckbox,
+    XCircleIcon
 },
   setup(props) {
     let activeTask = reactive(props.task);
     let toggleSubTask = ref(false);
 
+    function deleteSubTask(subTask) {
+      let sub_tasks = activeTask.sub_tasks;
+      // sub_tasks.forEach((sub_task) => {
+      //   sub_task.filter(s => s.id != )
+      // }
+
+      sub_tasks.filter((sub_task) => {
+        sub_task.id != subTask.id
+      })
+      activeTask.sub_tasks = sub_tasks;
+      let params = {
+        'subtask_id': subTask.id
+      }
+
+      router.post('/Subtask/Delete',  params);
+    }
+
     function saveTask(taskBody) {
-      console.log('modal component, save task: ', taskBody);
       let params = {
           parent_task_id: activeTask.id,
           task_body: taskBody,
@@ -98,6 +121,14 @@ export default {
 
     function toggleSubTaskComplete($event, subTask) {
       subTask.task_completed = $event;
+      let sub_tasks = activeTask.sub_tasks;
+
+      sub_tasks.forEach((sub_task) => {
+        if (sub_task.id === subTask.id) {
+          sub_task.subtask_completed = $event;
+          return;
+        }
+      })
 
       let params = subTask
       router.post('/Subtask/Update', params);
@@ -116,7 +147,8 @@ export default {
       toggleSubTask,
       toggleTaskComplete,
       saveTask,
-      toggleSubTaskComplete
+      toggleSubTaskComplete,
+      deleteSubTask
     }
   }
   

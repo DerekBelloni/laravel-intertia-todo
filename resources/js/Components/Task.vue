@@ -97,7 +97,6 @@ export default {
 
     function archiveTask(task) {
       // consider using a Set, doesn't allow duplicate values
-      console.log('task: ', task);
       let params = task;
       router.post('/ArchivedTask/Store', params);
     }

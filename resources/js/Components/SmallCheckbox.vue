@@ -15,6 +15,7 @@ const props = defineProps({
 
 const proxyChecked = computed({
     get() {
+        console.log('props: ', props.checked)
         return props.checked;
     },
 
@@ -31,7 +32,7 @@ const proxyChecked = computed({
         type="checkbox"
         :value="value"
         v-model="proxyChecked"
-        class="rounded border-2 border-emerald-200 bg-emerald-100 text-emerald-300 shadow-md focus:ring-emerald-100 h-3 w-3"
+        class="rounded border-2 border-teal-200 bg-teal-100 text-teal-300 shadow-md focus:ring-teal-100 h-3 w-3"
     />
 </template>
 

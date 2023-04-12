@@ -11,7 +11,7 @@ class SubTaskController extends Controller
   public function store(Request $request) 
   {
     $subtask = $request->all();
-    // dd($subtask['task_body']);
+
     SubTask::create([
       'parent_task_id' => $subtask['parent_task_id'],
       'subtask_type' => $subtask['subtask_type'],
@@ -26,5 +26,11 @@ class SubTaskController extends Controller
     SubTask::where('id', $subtask['id'])->update([
       'subtask_completed' => $subtask['task_completed']
     ]);
+  }
+
+  public function delete(Request $request)
+  {
+    $subtask = $request->all();
+    SubTask::where('id', $subtask['subtask_id'])->delete();
   }
 }

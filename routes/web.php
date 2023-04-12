@@ -51,6 +51,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('/Subtask/Store', [SubTaskController::class, 'store']);
     Route::post('/Subtask/Update', [SubTaskController::class, 'update']);
+    Route::post('/Subtask/Delete', [SubTaskController::class, 'delete']);
 });
 
 //Archived Task
