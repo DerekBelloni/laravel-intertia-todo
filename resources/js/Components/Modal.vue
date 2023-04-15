@@ -91,14 +91,11 @@ export default {
 
     function deleteSubTask(subTask) {
       let sub_tasks = activeTask.sub_tasks;
-      // sub_tasks.forEach((sub_task) => {
-      //   sub_task.filter(s => s.id != )
-      // }
 
-      sub_tasks.filter((sub_task) => {
-        sub_task.id != subTask.id
-      })
-      activeTask.sub_tasks = sub_tasks;
+      activeTask.sub_tasks.splice(activeTask.sub_tasks.findIndex((sub_task) => {
+        sub_task.id === subTask.id
+      }))
+
       let params = {
         'subtask_id': subTask.id
       }

@@ -29,6 +29,7 @@
         "@inertiajs/vue3": "^1.0.2",
         "daisyui": "^2.51.5",
         "flowbite": "^1.6.4",
-        "flowbite-vue": "^0.0.10"
+        "flowbite-vue": "^0.0.10",
+        "vuedraggable": "^2.24.3"
     }
 }

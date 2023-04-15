@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Database\Repositories\SubTask\SubTaskManager;
 use App\Models\SubTask;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -10,27 +11,16 @@ class SubTaskController extends Controller
 {
   public function store(Request $request) 
   {
-    $subtask = $request->all();
-
-    SubTask::create([
-      'parent_task_id' => $subtask['parent_task_id'],
-      'subtask_type' => $subtask['subtask_type'],
-      'subtask_body' => $subtask['task_body']
-    ]);
+    return SubTaskManager::store($request);
   }
 
   public function update(Request $request)
   {
-    $subtask = $request->all();
-
-    SubTask::where('id', $subtask['id'])->update([
-      'subtask_completed' => $subtask['task_completed']
-    ]);
+    return SubTaskManager::update($request);
   }
 
   public function delete(Request $request)
   {
-    $subtask = $request->all();
-    SubTask::where('id', $subtask['subtask_id'])->delete();
+    return SubTaskManager::delete($request);
   }
 }
