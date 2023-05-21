@@ -40,6 +40,7 @@ import Modal from '@/Components/Modal.vue';
 import { ref, defineProps, onMounted, reactive, computed } from 'vue';
 import { Inertia } from "@inertiajs/inertia";
 import { router } from '@inertiajs/vue3';
+
 export default {
   props: {
     task: {
@@ -48,30 +49,62 @@ export default {
     }
   },
   components: {
+    BookmarkSquareIcon,
+    BriefcaseIcon,
+    Button,
+    Checkbox,
+    Modal,
     Navbar,
     PrimaryButton,
-    TaskField,
-    Checkbox,
-    Button,
-    BriefcaseIcon,
-    XCircleIcon,
     PencilSquareIcon,
-    BookmarkSquareIcon,
-    Modal
+    TaskField,
+    XCircleIcon
 },
   setup(props) {
-    let toggleTask = ref(false);
+    let activeTask = reactive(props.task);
     let checked = ref(false);
     let completedTasks = [];
-    let workTasks = ref([]);
-    let value = null;
-    let taskBody = '';
     let isActive = ref(true);
     let isModalVisible = ref(false);
-    let activeTask = reactive(props.task);
+    let taskBody = '';
+    let toggleTask = ref(false);
+    let workTasks = ref([]);
+    let value = null;
 
 
     // functions -- try moving these outside the setup function
+    function archiveTask(task) {
+      // consider using a Set, doesn't allow duplicate values
+      let params = task;
+      router.post('/ArchivedTask/Store', params);
+    }
+    function closeModal() {
+      activeTask = null;
+      this.isModalVisible = false;
+    }
+    function deleteTask(taskToDelete) {
+      let workTasksD = this.workTasks;
+      let params = {
+        'task_id': taskToDelete.id
+      };
+      
+      this.workTasks = workTasksD.filter(t => t.id != taskToDelete.id);
+      router.post('/WorkChecklist/Delete',  params);
+    }
+    
+    function saveTask(task) {
+      let params = {
+          task_body: task
+      }
+      Inertia.post('/WorkChecklist/Store', params);
+    }
+
+    function showModal(task) {
+      activeTask = task;
+      this.isModalVisible = true;
+    }
+    
+    
     function toggleTaskField() {
       toggleTask.value = !toggleTask.value;
     }
@@ -84,59 +117,24 @@ export default {
       let params = activeTask;
       router.post('/WorkChecklist/Update' , params);
     }
-
-    function deleteTask(taskToDelete) {
-      let workTasksD = this.workTasks;
-      let params = {
-        'task_id': taskToDelete.id
-      };
-      
-      this.workTasks = workTasksD.filter(t => t.id != taskToDelete.id);
-      router.post('/WorkChecklist/Delete',  params);
-    }
-
-    function archiveTask(task) {
-      // consider using a Set, doesn't allow duplicate values
-      let params = task;
-      router.post('/ArchivedTask/Store', params);
-    }
-
-    function saveTask(task) {
-      console.log('save task coming from modal: ', task)
-      let params = {
-          task_body: task
-      }
-      Inertia.post('/WorkChecklist/Store', params);
-    }
-
-    function showModal(task) {
-      activeTask = task;
-      console.log('active task: ', activeTask);
-      this.isModalVisible = true;
-    }
-
-    function closeModal() {
-      activeTask = null;
-      this.isModalVisible = false;
-    }
-
+    
     return {
-      workTasks,
-      toggleTask,
-      value,
+      activeTask,
+      archiveTask,
       checked,
+      closeModal,
       completedTasks,
+      deleteTask,
+      isActive,
+      isModalVisible,
+      saveTask,
+      showModal, 
+      taskBody,
+      toggleTask,
       toggleTaskField,
       toggleTaskComplete,
-      deleteTask,
-      archiveTask,
-      isActive,
-      taskBody,
-      saveTask,
-      closeModal,
-      showModal, 
-      isModalVisible,
-      activeTask
+      workTasks,
+      value
     }
   }
 }

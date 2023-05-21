@@ -11,13 +11,13 @@
                 <span class="font-semibold ml-4 text-gray-600">Work</span>
                 <BriefcaseIcon class="h-6 w-6 text-teal-200"></BriefcaseIcon>
               </div>
-              <Task :task="task" v-for="task in tasks"></Task>
+              <Task :task="task" v-for="task in tasks" :key="task.id"></Task>
               <div class="mt-2 ml-6">
                 <a class="rounded p-1 cursor-pointer font-semibold text-gray-400 hover:text-teal-200" @click="toggleTaskField()">Add Task +</a>
               </div>
               <template v-if="toggleTask == true">
                 <div class="mt-4 ml-6">
-                <TaskField @saveTask="saveTaskTwo"></TaskField>
+                <TaskField @saveTask="handleSaveTask"></TaskField>
                 </div>
               </template>
             </div>
@@ -39,9 +39,11 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TaskField from '@/Components/TaskField.vue';
 import Button from '@/Components/Button.vue';
 import Task from '@/Components/Task.vue';
+import useSaveTask from "@/Composables/useSaveTask";
 import { ref, onMounted, reactive } from 'vue';
 import { Inertia } from "@inertiajs/inertia";
 import { router } from '@inertiajs/vue3';
+
 export default {
   props: {
     tasks: {
@@ -50,48 +52,27 @@ export default {
     }
   },
   components: {
-    Navbar,
-    PrimaryButton,
-    TaskField,
     Button,
     BriefcaseIcon,
-    XCircleIcon,
-    Task
+    Navbar,
+    PrimaryButton,
+    Task,
+    TaskField,
+    XCircleIcon
   },
   setup(props) {
     // variables
-    let toggleTask = ref(false);
     let checked = ref(false);
     let completedTasks = [];
-    let workTasks = reactive([]);
+    let toggleTask = ref(false);
     let value = null;
-
-    // lifecycle hooks
-    onMounted(() => {
-      workTasks = props.tasks;
-    })
+    let url = "/WorkChecklist/Store";
+    const { saveTask } = useSaveTask();
 
     // functions -- try moving these outside the setup function
-    function toggleTaskField() {
-      toggleTask.value = !toggleTask.value;
-    }
-
-
-    // figure out how to preserve scroll position when you toggle
-    // task complete
-    function toggleTaskComplete(task_id, $event, workTasks){
-      let taskChecked = {};
-      taskChecked.task_id = task_id;
-      taskChecked.task_complete = $event;
-      for (let i = 0; i < workTasks.length; i++) {
-        if (workTasks[i].id == taskChecked.task_id) {
-          workTasks[i].task_completed = taskChecked.task_complete
-        }
-      }
-
-      let params = workTasks;
-
-      router.post('/WorkChecklist/Update' , params);
+    function archiveTask(task) {
+      let params = task;
+      router.post('/ArchivedTask/Store', params);
     }
 
     function deleteTask(taskToDelete) {
@@ -104,30 +85,25 @@ export default {
       router.post('/WorkChecklist/Delete',  params);
     }
 
-    function archiveTask(task) {
-      let params = task;
-      router.post('/ArchivedTask/Store', params);
+    function handleSaveTask(taskBody) {
+      saveTask(url, taskBody, {parent_task_id: null, subtask_type: null});
     }
 
-    function saveTaskTwo(taskBody) {
-      let params = {
-          task_body: taskBody
-      }
-  
-      Inertia.post('/WorkChecklist/Store', params);
+    function toggleTaskField() {
+      toggleTask.value = !toggleTask.value;
     }
 
     return {
-      workTasks,
-      toggleTask,
-      value,
+      archiveTask,
       checked,
       completedTasks,
-      toggleTaskField,
-      toggleTaskComplete,
       deleteTask,
-      archiveTask,
-      saveTaskTwo
+      handleSaveTask,
+      saveTask,
+      toggleTask,
+      toggleTaskField,
+      url,
+      value
     }
   }
 }

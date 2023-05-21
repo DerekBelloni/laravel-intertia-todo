@@ -42,7 +42,8 @@
                 <a class="cursor-pointer hover:bg-gray-300 rounded px-2 py-1" @click="toggleSubTaskField($event)"><span>+ Add sub-task</span></a>
               </div>
               <div v-if="toggleSubTask == true" class="mt-2 mx-10" >
-                <TaskField @saveTask="saveTask"></TaskField>
+                <!-- <TaskField @saveTask="saveTask"></TaskField> -->
+                <TaskField @saveTask="handleSaveTask"></TaskField>
               </div>
             </div>
           </div>
@@ -66,6 +67,8 @@ import TaskField from '@/Components/TaskField.vue';
 import {reactive, onMounted, toRefs, ref} from 'vue';
 import { Inertia } from "@inertiajs/inertia";
 import { router } from '@inertiajs/vue3';
+import useSaveTask from "@/Composables/useSaveTask";
+
 export default {
   props: {
     isModalVisible: {
@@ -87,11 +90,11 @@ export default {
 },
   setup(props) {
     let activeTask = reactive(props.task);
+    let url = '/Subtask/Store';
     let toggleSubTask = ref(false);
+    const { saveTask } = useSaveTask();
 
     function deleteSubTask(subTask) {
-      let sub_tasks = activeTask.sub_tasks;
-
       activeTask.sub_tasks.splice(activeTask.sub_tasks.findIndex((sub_task) => {
         sub_task.id === subTask.id
       }))
@@ -103,13 +106,8 @@ export default {
       router.post('/Subtask/Delete',  params);
     }
 
-    function saveTask(taskBody) {
-      let params = {
-          parent_task_id: activeTask.id,
-          task_body: taskBody,
-          subtask_type: 'work'
-      }
-      Inertia.post('/Subtask/Store', params);
+    function handleSaveTask(taskBody) {
+      saveTask(url, taskBody, {parent_task_id: activeTask.id, subtask_type: 'work'});
     }
 
     function toggleSubTaskField() {
@@ -140,12 +138,13 @@ export default {
 
     return {
       activeTask,
+      deleteSubTask,
+      handleSaveTask,
+      saveTask,
       toggleSubTaskField,
       toggleSubTask,
       toggleTaskComplete,
-      saveTask,
       toggleSubTaskComplete,
-      deleteSubTask
     }
   }
   

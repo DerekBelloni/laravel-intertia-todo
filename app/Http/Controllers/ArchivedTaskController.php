@@ -12,6 +12,11 @@ use App\Models\WorkCheckList;
 
 class ArchivedTaskController extends Controller  
 {
+  public static function index(Request $request)
+  {
+    return ArchiveTaskManager::index($request);
+  }
+
   public static function store(Request $request) 
   {
     return ArchiveTaskManager::store($request);

@@ -56,6 +56,7 @@ Route::middleware('auth')->group(function () {
 
 //Archived Task
 Route::middleware('auth')->group(function () {
+    Route::get('/ArchivedTask', [ArchivedTaskController::class, 'index']);
     Route::post('/ArchivedTask/Store', [ArchivedTaskController::class, 'store']);
 });
 
