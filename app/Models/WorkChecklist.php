@@ -22,4 +22,9 @@ class WorkCheckList extends Model {
     return $this->hasMany(SubTask::class, 'parent_task_id', 'id');
   }
 
+  public function comments()
+  {
+    return $this->hasMany(Comment::class, 'parent_task_id', 'id');
+  }
+
 }

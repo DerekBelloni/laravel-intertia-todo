@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white">
+  <div class="bg-gray-100">
   <Navbar>
     <div id="task-container" class="container mx-auto bg-white">
       <div class="flex justify-center">
@@ -8,12 +8,12 @@
           <div class="grid grid-cols-12">
             <div class="grid col-start-3 col-span-9">
               <div class="flex mt-8 text-lg px-2 items-center flex-row space-x-2 mb-6">
-                <span class="font-semibold ml-4 text-gray-600">Work</span>
-                <BriefcaseIcon class="h-6 w-6 text-teal-200"></BriefcaseIcon>
+                <span class="font-semibold ml-4 text-gray-500">Work</span>
+                <BriefcaseIcon class="h-6 w-6 text-slate-300"></BriefcaseIcon>
               </div>
               <Task :task="task" v-for="task in tasks" :key="task.id"></Task>
               <div class="mt-2 ml-6">
-                <a class="rounded p-1 cursor-pointer font-semibold text-gray-400 hover:text-teal-200" @click="toggleTaskField()">Add Task +</a>
+                <a class="rounded p-1 cursor-pointer font-semibold text-gray-400 hover:text-rose-500" @click="toggleTaskField()">Add Task +</a>
               </div>
               <template v-if="toggleTask == true">
                 <div class="mt-4 ml-6">

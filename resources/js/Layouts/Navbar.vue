@@ -1,6 +1,6 @@
 <template>
   <div class="bg-white min-h-screen">
-  <div id="navbar" class="bg-teal-300">
+  <div id="navbar" class="bg-rose-600">
     <div class="ml-4 pb-2 pt-4 flex flex-row space-x-2 items-center">
       <FireIcon class="w-6 h-6 text-white"></FireIcon>
       <a @click="toggleSidePanel()"><Bars3Icon class="h-6 w-6 text-white cursor-pointer"></Bars3Icon></a>

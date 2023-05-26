@@ -2,9 +2,9 @@
   <form form @submit.prevent="saveTask()" class="mb-12">
     <div class="grid grid-cols-8">
       <div class="grid col-span-8">
-        <textarea v-model="taskBody" class="textarea focus:ring-teal-200 border border-gray-200 bg-white" rows="5" cols="55" placeholder="Create a task..." ></textarea>
+        <textarea v-model="taskBody" class="textarea rounded-lg focus:ring-rose-200 border border-gray-200 bg-white text-gray-400 shadow-sm" rows="5" cols="55" placeholder="Create a task..." ></textarea>
         <div class="flex justify-end ml-3 mt-4">
-          <a @click="$emit('save-task', taskBody)"><label class="btn btn-outline btn-ghost btn-xs">Submit</label></a>
+          <a @click="$emit('save-task', taskBody)"><label class="btn btn-outline btn-ghost btn-xs text-gray-400">Submit</label></a>
         </div>
       </div>
     </div>

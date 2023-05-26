@@ -10,9 +10,8 @@ class WorkCheckListManager
 {
   public static function index(Request $request)
   {
-    $tasks = WorkCheckList::with('subTasks')->where('user_id', Auth()->id())
+    $tasks = WorkCheckList::with(['subTasks', 'comments'])->where('user_id', Auth()->id())
     ->get(); 
-
     return Inertia::render('WorkChecklist', [
         "tasks" => $tasks
     ]);
