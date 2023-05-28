@@ -2,12 +2,14 @@
 
 use App\Http\Controllers\ArchivedTaskController;
 use App\Http\Controllers\CommentsController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SubTaskController;
 use App\Http\Controllers\WorkChecklistController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,9 +31,14 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Route::get('/Dashboard', function () {
+//     return Inertia::render('Dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
+
+// Dashboard
+Route::middleware('auth', 'verified')->group(function () {
+    Route::get('/Dashboard', [DashboardController::class, 'index'])->name('Dashboard');
+});
 
 // Profile
 Route::middleware('auth')->group(function () {

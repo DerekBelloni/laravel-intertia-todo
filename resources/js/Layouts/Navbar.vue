@@ -5,11 +5,11 @@
       <FireIcon class="w-6 h-6 text-white"></FireIcon>
       <a @click="toggleSidePanel()"><Bars3Icon class="h-6 w-6 text-white cursor-pointer"></Bars3Icon></a>
       <div class="mr-6">
-        <input id="custom-searchbar" placeholder="Search..." class="rounded h-6 placeholder:text-white  focus:ring-teal-200" type="search">
+        <input id="custom-searchbar" placeholder="Search..." class="rounded h-6 text-white placeholder:text-white  focus:ring-rose-200" type="search">
       </div>
   
      <div class="flex space-x-8">
-        <Link href="/" class="font-semibold text-white">Home</Link>
+        <Link href="/Dashboard" class="font-semibold text-white">Home</Link>
         <Link href="/" class="font-semibold text-white">About</Link>
         <Link href="/ArchivedTask" class="font-semibold text-white">Archive</Link>
      </div>

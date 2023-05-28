@@ -1,6 +1,6 @@
 <template>
     <div class="modal-backdrop">
-      <div id="modal-body" class="rounded-xl max-w-3xl">
+      <div id="modal-body" class="rounded-xl max-w-3xl bg-gray-100">
         <header class="modal-header">
           <slot name="header">
             <div class="flex justify-end">
@@ -48,13 +48,15 @@
               <div class="col-span-5 border-l-2">
                 <div class="mx-6 flex flex-col">
                   <span class="text-gray-400 mb-4 ">Comments</span>
-                  <textarea v-model="newComment" class="rounded-xl border border-gray-200 focus:ring-teal-200 shadow-inner text-xs text-gray-400"></textarea>
+                  <textarea v-model="newComment" class="rounded-xl border border-gray-200 focus:ring-teal-200 shadow-sm text-xs text-gray-400"></textarea>
                   <div class="flex justify-end">
                     <button @click="saveComment()" class="text-xs text-gray-400 mr-2 mt-2 hover:bg-gray-300 hover:rounded-full hover:text-gray-100 hover:p-1">Submit</button>
                   </div>
+                  <div class="flex flex-col space-y-2">
                   <template v-for="comment in activeTask.comments">
-                     <span>{{ comment }}</span>
+                    <span class="flex justify-center text-gray-400 mt-2 ml-6 rounded-xl bg-white shadow-inner p-2">{{ comment.comment_body }}</span>
                   </template>
+                </div>
                 </div>
               </div>
             </div>
@@ -187,7 +189,7 @@
     }
   
     #modal-body {
-      background: #f4f4f4;
+      /* background: #f1efef; */
       overflow-x: auto;
       display: flex;
       flex-direction: column;
