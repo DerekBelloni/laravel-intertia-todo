@@ -53,6 +53,7 @@ class DashboardManager
       "user" => $user,
       "incomplete_tasks" => $incomplete_tasks,
       "datetime_pieces" => $datetime_pieces,
+      "tasks" => $tasks,
       "time_of_day" => $time_of_day
     ]);
   }

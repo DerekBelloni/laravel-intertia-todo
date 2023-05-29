@@ -17,7 +17,7 @@
           <label for="my-modal-5"><PencilSquareIcon class="h-6 w-6 text-gray-400 hover:bg-gray-400 hover:text-white rounded px-1" @click="showModal(task)"></PencilSquareIcon></label>
           <a class="hover:bg-gray-400 px-1 rounded" :class="task.task_completed ? 'cursor-pointer font-medium text-gray-400 hover:text-white' : 'cursor-pointer pr-2 font-medium text-gray-400 hover:text-white'" @click="archiveTask(task)"><span >Archive Task</span></a>
           <div class="flex justify-end" v-if="task.task_completed">
-          <a @click="deleteTask(task)"><XCircleIcon class="h-6 w-6 text-gray-200 cursor-pointer hover:text-red-500 flex" ></XCircleIcon></a>
+          <a @click="deleteTask(task)"><XCircleIcon class="h-6 w-6 text-gray-200 cursor-pointer hover:text-red-500 flex"></XCircleIcon></a>
         </div>
         </div>
       </div>

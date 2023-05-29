@@ -4,8 +4,8 @@
         <header class="modal-header">
           <slot name="header">
             <div class="flex justify-end">
-              <button class="text-gray-100 bg-gray-200 px-2 rounded-full hover:text-rose-400 hover:bg-gray-100 hover:border-rose-400 hover:border" @click="$emit('toggleModal')">
-                +
+              <button @click="$emit('toggleModal')">
+                <font-awesome-icon class="text-gray-300 hover:text-rose-500" :icon="['fasr', 'circle-xmark']" />
               </button>
             </div>
           </slot>

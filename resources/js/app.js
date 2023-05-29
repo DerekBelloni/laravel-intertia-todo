@@ -6,12 +6,34 @@ import { createInertiaApp } from "@inertiajs/vue3";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import { ZiggyVue } from "../../vendor/tightenco/ziggy/dist/vue.m";
 import { library } from "@fortawesome/fontawesome-svg-core";
-// import { faRightToBracket, faSearch } from "@fortawesome/free-solid-svg-icons";
-// import { faHatWizard } from "@fortawesome/free-solid-svg-icons";
-import { faBell } from "@fortawesome/free-regular-svg-icons";
+import {
+    faHatWizard,
+    faBell,
+    faInbox,
+    faCircleXmark,
+    faCheck,
+    faBullseye,
+} from "@fortawesome/free-solid-svg-icons";
+import {
+    faBell as farBell,
+    faCalendarDays,
+    faCircleUser,
+    faTrashCan,
+} from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(faBell);
+library.add(
+    faHatWizard,
+    faBell,
+    farBell,
+    faCalendarDays,
+    faInbox,
+    faCircleXmark,
+    faCircleUser,
+    faTrashCan,
+    faCheck,
+    faBullseye
+);
 
 const appName =
     window.document.getElementsByTagName("title")[0]?.innerText || "Laravel";

@@ -9,7 +9,6 @@
             <div class="grid col-start-3 col-span-9">
               <div class="flex mt-8 text-lg px-2 items-center flex-row space-x-2 mb-6">
                 <span class="font-semibold ml-4 text-gray-500">Work</span>
-                <BriefcaseIcon class="h-6 w-6 text-slate-300"></BriefcaseIcon>
               </div>
               <Task :task="task" v-for="task in tasks" :key="task.id"></Task>
               <div class="mt-2 ml-6">

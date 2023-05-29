@@ -19,6 +19,7 @@ class WorkCheckListManager
 
   public static function store(Request $request)
   {
+    // dd($request->all());
     $checklist_body  = $request->input('task_body');   
 
     WorkCheckList::create([
