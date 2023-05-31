@@ -10,7 +10,7 @@
   
      <div class="flex space-x-8">
         <Link href="/Dashboard" class="font-semibold text-white">Home</Link>
-        <Link href="/" class="font-semibold text-white">About</Link>
+        <!-- <Link href="/" class="font-semibold text-white">About</Link> -->
         <Link href="/ArchivedTask" class="font-semibold text-white">Archive</Link>
      </div>
     </div>

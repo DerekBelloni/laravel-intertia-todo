@@ -1,31 +1,32 @@
 <template>
     <div class="modal-backdrop">
-      <div id="modal-body" class="rounded-xl max-w-3xl bg-gray-100">
+      <div id="modal-body" class="rounded max-w-xl bg-gray-100">
         <header class="modal-header">
           <slot name="header">
-            <div class="flex justify-end">
-              <button @click="$emit('toggleModal')">
-                <font-awesome-icon class="text-gray-300 hover:text-rose-500" :icon="['fasr', 'circle-xmark']" />
-              </button>
+            <div class="border-b py-2 px-2 flex items-center justify-between my-1">
+              <div>
+                <button class="ml-6 rounded px-2 py-1 text-gray-400 hover:border-emerald-500 hover:border-2 hover:bg-emerald-400 border hover:opacity-50 hover:text-emerald-100 text-xs">Mark Complete</button>
+              </div>
+              <div class="flex justify-end">
+                <button @click="$emit('toggleModal')">
+                  <font-awesome-icon class="text-gray-300 hover:text-rose-500" :icon="['fasr', 'circle-xmark']" />
+                </button>
+              </div>
             </div>
           </slot>
         </header>
   
-        <section class="mt-10">
+        <section class="mt-4" id="main-content">
           <slot name="body">
             <!--Grid-->
-            <div class="grid grid-cols-12 ">
-              <div class=" mt-2 ml-12 mr-10 pb-2 col-span-7">
+            <div class="grid grid-cols-12">
+              <div class=" mt-2 ml-6 mr-10 pb-2 col-span-12">
                 <div class="flex flex-row items-center">
-                  <Checkbox :checked="activeTask.task_completed" class="h-4 w-4 text-gray-400" @update:checked="toggleTaskComplete($event)"></Checkbox>
-                  <div class="ml-6">
-                    <span class="text-xl font-thin" :class="activeTask.task_completed ? 'line-through text-gray-400' : 'text-gray-400'">{{ activeTask.checklist_title }}</span>
-                  </div>
                 </div>
-                <div class="mt-2 ml-10 text-gray-400 text-md font-thin"  :class="activeTask.task_completed ? 'line-through text-gray-400' : ''">
+                <div class="text-gray-400 text-xl font-semibold"  :class="activeTask.task_completed ? 'line-through text-gray-400' : ''">
                   <span>{{ activeTask.checklist_item_body }}</span>
                 </div>
-                <div class="ml-12 text-sm font-medium">
+                <div class="ml-12">
                   <ul v-for="subTask in activeTask.sub_tasks">
                     <div class="flex flex-row items-center justify-between">
                       <div class="flex items-center">
@@ -45,28 +46,27 @@
                   <TaskField @saveTask="handleSaveTask"></TaskField>
                 </div>
               </div>
-              <div class="col-span-5 border-l-2">
-                <div class="mx-6 flex flex-col">
-                  <span class="text-gray-400 mb-4 ">Comments</span>
-                  <textarea v-model="newComment" class="rounded-xl border border-gray-200 focus:ring-teal-200 shadow-sm text-xs text-gray-400"></textarea>
-                  <div class="flex justify-end">
-                    <button @click="saveComment()" class="text-xs text-gray-400 mr-2 mt-2 hover:bg-gray-300 hover:rounded-full hover:text-gray-100 hover:p-1">Submit</button>
-                  </div>
-                  <div class="flex flex-col space-y-2">
-                  <template v-for="comment in activeTask.comments">
-                    <span class="flex justify-center text-gray-400 mt-2 ml-6 rounded-xl bg-white shadow-inner p-2">{{ comment.comment_body }}</span>
-                  </template>
-                </div>
-                </div>
-              </div>
             </div>
+            
+            <!-- <div class="grid grid-cols-10 border-t mt-16">
+              <div class="col-span-8">
+                  <div class="flex justify-center">
+                    <textarea v-model="newComment" class="rounded-xl border border-gray-200 focus:ring-teal-200 shadow-sm text-xs text-gray-400"></textarea>
+                    <div class="flex justify-end">
+                      <button @click="saveComment()" class="text-xs text-gray-400 mr-2 mt-2 hover:bg-gray-300 hover:rounded-full hover:text-gray-100 hover:p-1">Submit</button>
+                    </div>
+                    <div class="flex flex-col space-y-2">
+                    <template v-for="comment in activeTask.comments">
+                      <span class="flex justify-center text-gray-400 mt-2 ml-6 rounded-xl bg-white shadow-inner p-2">{{ comment.comment_body }}</span>
+                    </template>
+                  </div>
+              </div>
+              </div>
+            </div> -->
           </slot>
         </section>
-  
-        <footer class="modal-footer flex justify-end mr-6">
-          <slot name="footer">
+          <slot>
           </slot>
-        </footer>
       </div>
     </div>
   </template>
@@ -77,7 +77,7 @@
   import Checkbox from '@/Components/Checkbox.vue';
   import SmallCheckbox from '@/Components/SmallCheckbox.vue';
   import TaskField from '@/Components/TaskField.vue';
-  import {reactive, onMounted, toRefs, ref} from 'vue';
+  import {reactive, onMounted, toRefs, ref, computed, watchEffect, watch, onUpdated} from 'vue';
   import { Inertia } from "@inertiajs/inertia";
   import { router } from '@inertiajs/vue3';
   import useSaveTask from "@/Composables/useSaveTask";
@@ -90,7 +90,8 @@
       },
       task: {
         type: Object,
-        required: false
+        required: false,
+        default: () => ({}) 
       }
     },
     components: {
@@ -103,11 +104,12 @@
   },
     setup(props) {
       let activeTask = reactive(props.task);
-      let newComment = ref('')
+      let newComment = ref('');
       let toggleSubTask = ref(false);
       let url = '/Subtask/Store';
       const { saveTask } = useSaveTask();
-  
+
+
       function deleteSubTask(subTask) {
         activeTask.sub_tasks.splice(activeTask.sub_tasks.findIndex((sub_task) => {
           sub_task.id === subTask.id
@@ -188,25 +190,18 @@
       align-items: center;
     }
   
-    #modal-body {
-      /* background: #f1efef; */
-      overflow-x: auto;
-      display: flex;
-      flex-direction: column;
-      min-height: 625px;
-      min-width: 890px;
+    #modal-body { 
+      height: 70%;
+      min-width: 700px;
     }
-  
-    .modal-header,
-    .modal-footer {
-      padding: 10px;
-      /* display: flex; */
+
+    #bottom {
+      position: absolute;
+      align-items: bottom;
     }
-    
-    .btn-green {
-      color: white;
-      background: #4AAE9B;
-      border: 1px solid #4AAE9B;
-      border-radius: 2px;
+
+    #main-content {
+      height: 65%;
     }
+
   </style>

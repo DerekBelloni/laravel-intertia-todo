@@ -19,6 +19,7 @@ import {
     faCalendarDays,
     faCircleUser,
     faTrashCan,
+    faCircleRight,
 } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
@@ -32,7 +33,8 @@ library.add(
     faCircleUser,
     faTrashCan,
     faCheck,
-    faBullseye
+    faBullseye,
+    faCircleRight
 );
 
 const appName =

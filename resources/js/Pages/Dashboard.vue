@@ -39,8 +39,11 @@
               </div>
               <div v-for="task in activeTasks">
                 <div v-if="!task.task_completed">
-                  <div class="ml-4 border-b border-gray-200 pb-2">
-                    <span class="text-gray-600 font-semibold ">{{ task.checklist_item_body }}</span>
+                  <div class="ml-4 border-b border-gray-200 py-1 flex items-center justify-between">
+                    <span class="text-gray-600 font-semibold truncate overflow-hidden">
+                      {{ task.checklist_item_body }}
+                    </span>
+                    <font-awesome-icon @click="showModal(task)" class="mr-3 text-gray-500 hover:text-emerald-300" :icon="['far', 'circle-right']" />
                   </div>
                 </div>
               </div>
@@ -51,20 +54,22 @@
               <div class="flex items-center my-2 border-b pl-2 pb-2">
                 <span class="font-semibold text-gray-600 ml-4">Projects</span>
               </div>
-              <div class="ml-4 text-center my-4" v-if="!projects">
+              <div class="ml-4 text-center my-4" >
                 <span class="text-gray-600 font-semibold">You currently have no projects. Get started!</span>
               </div>
             </div>
           </div>
         </div>
+        <Modal v-if="isModalVisible && Object.keys(activeTask).length > 0" :task="activeTask"  v-show="isModalVisible" @toggleModal="closeModal()"></Modal>
       </div>
     </Navbar>
   </div>
 </template>
 
 <script >
+import Modal from '@/Components/Modal.vue';
 import Navbar from '@/Layouts/Navbar.vue';
-import { ref, onMounted, reactive } from 'vue';
+import { ref, onMounted, reactive, watch } from 'vue';
 import useSaveTask from "@/Composables/useSaveTask";
 const { saveTask } = useSaveTask();
 
@@ -92,21 +97,52 @@ export default{
     }
   },
   components: {
-    Navbar
+    Navbar,
+    Modal
   },
   setup(props) {
     let activeTasks = reactive(props.tasks);
+    let activeTask = ref({
+      id: 0,
+      user_id: 0,
+      checklist_title: null,
+      checklist_item_body: null,
+      task_completed: false
+    });
+    let isModalVisible = ref(false);
     let taskBody = ref('');
     let url = "/WorkChecklist/Store";
+
+    function closeModal() {
+      activeTask.id = 0;
+      activeTask.user_id = 0;
+      activeTask.checklist_title = null;
+      activeTask.checklist_item_body = null;
+      activeTask.task_completed = false;
+      isModalVisible.value = false;
+    }
 
     function handleSaveTask() {
       let task_body = taskBody.value;
       saveTask(url, task_body, {parent_task_id: null, subtask_type: null});
     }
 
+    function showModal(task) {
+      activeTask.value.id = task.id;
+      activeTask.value.user_id = task.user_id;
+      activeTask.value.checklist_title = task.checklist_title;
+      activeTask.value.checklist_item_body = task.checklist_item_body;
+      activeTask.value.task_completed = task.task_completed;
+      isModalVisible.value = true;;
+    }
+
     return {
+      activeTask,
       activeTasks,
+      closeModal,
       handleSaveTask,
+      isModalVisible,
+      showModal,
       taskBody
     }
   }
