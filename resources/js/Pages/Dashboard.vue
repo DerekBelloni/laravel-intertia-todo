@@ -60,7 +60,15 @@
             </div>
           </div>
         </div>
-        <Modal v-if="isModalVisible && Object.keys(activeTask).length > 0" :task="activeTask"  v-show="isModalVisible" @toggleModal="closeModal()"></Modal>
+        <Modal 
+        v-if="isModalVisible && Object.keys(activeTask).length > 0" 
+        :task="activeTask" 
+        :user="user" 
+        :datetime_pieces="datetime_pieces" 
+        v-show="isModalVisible"
+        @toggleModal="closeModal()"
+        @taskComplete="toggleTaskComplete(activeTask)"
+        ></Modal>
       </div>
     </Navbar>
   </div>
@@ -71,6 +79,8 @@ import Modal from '@/Components/Modal.vue';
 import Navbar from '@/Layouts/Navbar.vue';
 import { ref, onMounted, reactive, watch } from 'vue';
 import useSaveTask from "@/Composables/useSaveTask";
+import { Inertia } from "@inertiajs/inertia";
+import { router } from '@inertiajs/vue3';
 const { saveTask } = useSaveTask();
 
 export default{
@@ -118,8 +128,12 @@ export default{
       activeTask.user_id = 0;
       activeTask.checklist_title = null;
       activeTask.checklist_item_body = null;
-      activeTask.task_completed = false;
+      // activeTask.task_completed = false;
       isModalVisible.value = false;
+    }
+
+    function handleEmit($event) {
+      console.log('event: ', $event)
     }
 
     function handleSaveTask() {
@@ -133,7 +147,15 @@ export default{
       activeTask.value.checklist_title = task.checklist_title;
       activeTask.value.checklist_item_body = task.checklist_item_body;
       activeTask.value.task_completed = task.task_completed;
-      isModalVisible.value = true;;
+      isModalVisible.value = true;
+    }
+
+    function toggleTaskComplete(activeTask) {
+      activeTask.task_completed = !activeTask.task_completed;
+      let params = activeTask;
+
+      router.post('/WorkChecklist/Update' , params);
+      Inertia.reload();
     }
 
     return {
@@ -141,9 +163,11 @@ export default{
       activeTasks,
       closeModal,
       handleSaveTask,
+      handleEmit,
       isModalVisible,
       showModal,
-      taskBody
+      taskBody,
+      toggleTaskComplete
     }
   }
 }

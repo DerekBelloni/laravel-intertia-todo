@@ -13,7 +13,7 @@ class DashboardManager
   public static function index(Request $request)
   {
     $user = Auth()->user();
-
+   
     $tasks = WorkCheckList::where('user_id', Auth()->id())->get();
 
     $incomplete_tasks = 0;
@@ -49,6 +49,7 @@ class DashboardManager
       'date' => $date
     ];
   
+    // dd($user);
     return Inertia::render('Dashboard', [
       "user" => $user,
       "incomplete_tasks" => $incomplete_tasks,

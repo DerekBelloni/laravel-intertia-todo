@@ -109,8 +109,6 @@ export default {
       toggleTask.value = !toggleTask.value;
     }
 
-    // figure out how to preserve scroll position when you toggle
-    // task complete
     function toggleTaskComplete($event){
       activeTask.task_completed = $event;
 

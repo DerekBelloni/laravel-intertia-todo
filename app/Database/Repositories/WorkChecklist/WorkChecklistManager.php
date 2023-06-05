@@ -12,6 +12,9 @@ class WorkCheckListManager
   {
     $tasks = WorkCheckList::with(['subTasks', 'comments'])->where('user_id', Auth()->id())
     ->get(); 
+
+    $user = Auth()->user();
+    
     return Inertia::render('WorkChecklist', [
         "tasks" => $tasks
     ]);
@@ -31,6 +34,7 @@ class WorkCheckListManager
 
   public static function update(Request $request)
   {
+    // dd($request->all());
     $work_tasks = $request->all();
 
     WorkCheckList::where('id', $work_tasks["id"])

@@ -5,10 +5,15 @@
           <slot name="header">
             <div class="border-b py-2 px-2 flex items-center justify-between my-1">
               <div>
-                <button class="ml-6 rounded px-2 py-1 text-gray-400 hover:border-emerald-500 hover:border-2 hover:bg-emerald-400 border hover:opacity-50 hover:text-emerald-100 text-xs">Mark Complete</button>
+                <button @click="$emit('taskComplete')" :class="!activeTask.task_completed ? 'ml-6 rounded px-2 py-1 text-gray-400 hover:border-emerald-500 hover:border-2 hover:bg-emerald-400 border hover:opacity-50 hover:text-emerald-100 text-xs' : 'ml-6 rounded px-2 py-1 border-emerald-500 border-2 bg-emerald-400  opacity-50 text-emerald-100 text-xs'">
+                  <template v-if="activeTask.task_completed">
+                    <font-awesome-icon :icon="['fas', 'check']" />
+                  </template>
+                  Mark Complete
+                </button>
               </div>
               <div class="flex justify-end">
-                <button @click="$emit('toggleModal')">
+                <button @click="$emit('toggleModal', activeTask)">
                   <font-awesome-icon class="text-gray-300 hover:text-rose-500" :icon="['fasr', 'circle-xmark']" />
                 </button>
               </div>
@@ -23,27 +28,24 @@
               <div class=" mt-2 ml-6 mr-10 pb-2 col-span-12">
                 <div class="flex flex-row items-center">
                 </div>
-                <div class="text-gray-400 text-xl font-semibold"  :class="activeTask.task_completed ? 'line-through text-gray-400' : ''">
+                <div class="text-gray-500 text-xl font-semibold"  :class="activeTask.task_completed ? 'line-through text-gray-400' : ''">
                   <span>{{ activeTask.checklist_item_body }}</span>
                 </div>
-                <div class="ml-12">
-                  <ul v-for="subTask in activeTask.sub_tasks">
-                    <div class="flex flex-row items-center justify-between">
-                      <div class="flex items-center">
-                        <SmallCheckbox :checked="subTask.subtask_completed" @update:small-checked="toggleSubTaskComplete($event, subTask)"></SmallCheckbox>
-                        <li class="pl-2 text-gray-400" :class="subTask.subtask_completed ? 'line-through' : ''">{{ subTask.subtask_body }}</li>
-                      </div>
-                      <div>
-                        <XCircleIcon v-if="subTask.subtask_completed" class="h-3 w-3 text-gray-400 hover:text-red-500" @click="deleteSubTask(subTask)"></XCircleIcon>
-                      </div>
-                    </div>
-                  </ul>
+              </div>
+            </div>
+            <div class="grid grid-cols-12 ml-6 mt-2">
+              <div class="flex flex-col space-y-4">
+                <div class="flex flex-row space-x-20">
+                  <div>
+                    <span class="text-sm font-medium text-gray-400">Assignee</span>
+                  </div>
+                  <div>
+                    <span class="text-sm font-medium text-gray-400">{{user.name}}</span>
+                  </div>
                 </div>
-                <div class="mt-4 text-xs ml-10 text-gray-400 font-medium">
-                  <a class="cursor-pointer hover:bg-gray-300 hover:text-white rounded px-2 py-1" @click="toggleSubTaskField($event)"><span>+ Add sub-task</span></a>
-                </div>
-                <div v-if="toggleSubTask == true" class="mt-2 mx-10" >
-                  <TaskField @saveTask="handleSaveTask"></TaskField>
+                <div class="flex flex-row space-x-20">
+                  <span class="text-sm font-medium text-gray-400">Due Date</span>
+                  <span>{{ datetime_pieces }}</span>
                 </div>
               </div>
             </div>
@@ -77,13 +79,17 @@
   import Checkbox from '@/Components/Checkbox.vue';
   import SmallCheckbox from '@/Components/SmallCheckbox.vue';
   import TaskField from '@/Components/TaskField.vue';
-  import {reactive, onMounted, toRefs, ref, computed, watchEffect, watch, onUpdated} from 'vue';
+  import {reactive, onMounted, ref, defineEmits, getCurrentInstance} from 'vue';
   import { Inertia } from "@inertiajs/inertia";
   import { router } from '@inertiajs/vue3';
   import useSaveTask from "@/Composables/useSaveTask";
   
   export default {
     props: {
+      datetime_pieces: {
+        type: Object,
+        required: false
+      },  
       isModalVisible: {
         type: Boolean,
         required: false
@@ -92,6 +98,10 @@
         type: Object,
         required: false,
         default: () => ({}) 
+      },
+      user: {
+        type: Object,
+        required: false
       }
     },
     components: {
@@ -101,14 +111,23 @@
       TaskField,
       SmallCheckbox,
       XCircleIcon
-  },
+    },
+    emits: ['taskComplete'],
     setup(props) {
       let activeTask = reactive(props.task);
+      let dueDate = ref('');
       let newComment = ref('');
+      let timePieces = ref(props.datetime_pieces);
       let toggleSubTask = ref(false);
       let url = '/Subtask/Store';
-      const { saveTask } = useSaveTask();
 
+      const { saveTask } = useSaveTask();
+     
+
+
+      onMounted(() => {
+        setDueDate();
+      })
 
       function deleteSubTask(subTask) {
         activeTask.sub_tasks.splice(activeTask.sub_tasks.findIndex((sub_task) => {
@@ -133,6 +152,10 @@
         }
         router.post('/Comments/Store', params);
       }
+
+      function setDueDate() {
+        console.log('time: ', timePieces.value);
+      }
   
       function toggleSubTaskField() {
         toggleSubTask.value = !toggleSubTask.value;
@@ -153,9 +176,9 @@
         router.post('/Subtask/Update', params);
       }
   
-      function toggleTaskComplete($event) {
-        activeTask.task_completed = $event;
-  
+      function toggleTaskComplete() {
+        activeTask.task_completed = !activeTask.task_completed;
+       
         let params = activeTask;
         router.post('/WorkChecklist/Update' , params);
       }
