@@ -4,7 +4,7 @@ namespace App\Database\Repositories\Dashboard;
 
 use Illuminate\Http\Request;
 use App\Models\User;
-use App\Models\WorkCheckList;
+use App\Models\CheckList;
 use Inertia\Inertia;
 use Carbon\Carbon;
 
@@ -14,8 +14,8 @@ class DashboardManager
   {
     $user = Auth()->user();
    
-    $tasks = WorkCheckList::where('user_id', Auth()->id())->get();
-
+    $tasks = CheckList::where('user_id', Auth()->id())->get();
+    // dd($tasks);
     $incomplete_tasks = 0;
 
     foreach ($tasks as $task) {

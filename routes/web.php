@@ -5,7 +5,8 @@ use App\Http\Controllers\CommentsController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SubTaskController;
-use App\Http\Controllers\WorkChecklistController;
+use App\Http\Controllers\ChecklistController;
+use App\Http\Controllers\ProjectController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -40,6 +41,11 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::get('/Dashboard', [DashboardController::class, 'index'])->name('Dashboard');
 });
 
+// Projects
+Route::middleware('auth')->group(function() {
+    Route::post('/Project/Store', [ProjectController::class, 'store']);
+});
+
 // Profile
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -47,12 +53,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// Work Checklist
+// Checklist
 Route::middleware('auth')->group(function () {
-    Route::get('/WorkChecklist', [WorkChecklistController::class, 'index'])->name('workchecklist.index');
-    Route::post('/WorkChecklist/Store', [WorkChecklistController::class, 'store']);
-    Route::post('/WorkChecklist/Update', [WorkChecklistController::class, 'update']);
-    Route::post('/WorkChecklist/Delete', [WorkChecklistController::class, 'delete']);
+    Route::get('/Checklist', [ChecklistController::class, 'index'])->name('checklist.index');
+    Route::post('/Checklist/Store', [ChecklistController::class, 'store']);
+    Route::post('/Checklist/Update', [ChecklistController::class, 'update']);
+    Route::post('/Checklist/Delete', [ChecklistController::class, 'delete']);
 });
 
 // Sub-tasks

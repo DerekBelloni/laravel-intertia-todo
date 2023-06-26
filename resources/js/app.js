@@ -5,12 +5,15 @@ import { createApp, h } from "vue";
 import { createInertiaApp } from "@inertiajs/vue3";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import { ZiggyVue } from "../../vendor/tightenco/ziggy/dist/vue.m";
+import VueDatePicker from "@vuepic/vue-datepicker";
+import "@vuepic/vue-datepicker/dist/main.css";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
     faHatWizard,
     faBell,
     faInbox,
     faCircleXmark,
+    faCirclePlus,
     faCheck,
     faBullseye,
 } from "@fortawesome/free-solid-svg-icons";
@@ -30,6 +33,7 @@ library.add(
     faCalendarDays,
     faInbox,
     faCircleXmark,
+    faCirclePlus,
     faCircleUser,
     faTrashCan,
     faCheck,
@@ -52,6 +56,7 @@ createInertiaApp({
             .use(plugin)
             .use(ZiggyVue, Ziggy)
             .component("font-awesome-icon", FontAwesomeIcon)
+            .component("VueDatePicker", VueDatePicker)
             .mount(el);
     },
     progress: {

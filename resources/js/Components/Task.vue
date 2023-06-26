@@ -2,11 +2,17 @@
 <div class="ml-6 space-y-4">
   <div class="flex flex-col border-t border-gray-200 py-2 px-2">
       <div>
-        <div class="flex justify-start items-center">
-          <Checkbox :checked="activeTask.task_completed" :value="value"  @update:checked="toggleTaskComplete($event)"></Checkbox>
-          <div class="ml-4">
-            <span class="flex font-thin text-gray-400 decoration-zinc-500	text-sm" :class="activeTask.task_completed ? 'line-through' : ''">{{ activeTask.checklist_item_body }}</span>
+        <div class="flex flex-row justify-between">
+          <div class="flex justify-start items-center">
+            <Checkbox :checked="activeTask.task_completed" :value="value"  @update:checked="toggleTaskComplete($event)"></Checkbox>
+            <div class="ml-4">
+              <span class="flex font-thin text-gray-400 decoration-zinc-500	text-sm" :class="activeTask.task_completed ? 'line-through' : ''">{{ activeTask.checklist_item_body }}</span>
+            </div>
           </div>
+          <!-- <div class="flex flex-row">
+            <span class="text-xs text-gray-500">Due Date</span>
+            <VueDatePicker v-model="date"></VueDatePicker>
+          </div> -->
         </div>
       </div>
       <div class="flex items-baseline justify-between">
@@ -41,6 +47,7 @@ import { ref, defineProps, onMounted, reactive, computed } from 'vue';
 import { Inertia } from "@inertiajs/inertia";
 import { router } from '@inertiajs/vue3';
 
+
 export default {
   props: {
     task: {
@@ -58,7 +65,7 @@ export default {
     PrimaryButton,
     PencilSquareIcon,
     TaskField,
-    XCircleIcon
+    XCircleIcon,
 },
   setup(props) {
     let activeTask = reactive(props.task);
@@ -70,6 +77,7 @@ export default {
     let toggleTask = ref(false);
     let workTasks = ref([]);
     let value = null;
+    
 
 
     // functions -- try moving these outside the setup function
@@ -89,14 +97,14 @@ export default {
       };
       
       this.workTasks = workTasksD.filter(t => t.id != taskToDelete.id);
-      router.post('/WorkChecklist/Delete',  params);
+      router.post('/Checklist/Delete',  params);
     }
     
     function saveTask(task) {
       let params = {
           task_body: task
       }
-      Inertia.post('/WorkChecklist/Store', params);
+      Inertia.post('/Checklist/Store', params);
     }
 
     function showModal(task) {
@@ -113,7 +121,7 @@ export default {
       activeTask.task_completed = $event;
 
       let params = activeTask;
-      router.post('/WorkChecklist/Update' , params);
+      router.post('/Checklist/Update' , params);
     }
     
     return {

@@ -21,31 +21,36 @@
           </slot>
         </header>
   
-        <section class="mt-4" id="main-content">
+        <section class="mt-2" id="main-content">
           <slot name="body">
             <!--Grid-->
-            <div class="grid grid-cols-12">
-              <div class=" mt-2 ml-6 mr-10 pb-2 col-span-12">
-                <div class="flex flex-row items-center">
+            <div class="space-y-4">
+              <div class="grid grid-cols-12">
+                <div class=" mt-2 ml-6 mr-10 pb-2 col-span-12">
+                  <div class="text-gray-500 text-xl font-semibold"  :class="activeTask.task_completed ? 'line-through text-gray-400' : ''">
+                    <span>{{ activeTask.checklist_item_body }}</span>
+                  </div>
                 </div>
-                <div class="text-gray-500 text-xl font-semibold"  :class="activeTask.task_completed ? 'line-through text-gray-400' : ''">
-                  <span>{{ activeTask.checklist_item_body }}</span>
+                <div class="col-span-4 mt-2">
+                  <div class="flex flex-row justify-between items-center">
+                    <div class="ml-6">
+                      <span class="font-medium text-gray-500">Assignee</span>
+                    </div>
+                    <div>
+                      <span class="font-medium text-gray-500">{{ user?.name }}</span>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="grid grid-cols-12 ml-6 mt-2">
-              <div class="flex flex-col space-y-4">
-                <div class="flex flex-row space-x-20">
-                  <div>
-                    <span class="text-sm font-medium text-gray-400">Assignee</span>
-                  </div>
-                  <div>
-                    <span class="text-sm font-medium text-gray-400">{{user.name}}</span>
-                  </div>
-                </div>
-                <div class="flex flex-row space-x-20">
-                  <span class="text-sm font-medium text-gray-400">Due Date</span>
-                  <span>{{ datetime_pieces }}</span>
+              <div class="col-span-4">
+                <div class="flex flex-row items-center">
+                    <div class="ml-6">
+                      <span class="font-medium text-gray-500">Due Date</span>
+                    </div>
+                    <div class="ml-24">
+                      <!-- <VueDatePicker :model-value="activeTask.due_date" class="date-picker" v-if="!activeTask.due_date" v-model="date">{{ date }}</VueDatePicker> -->
+                      <VueDatePicker class="date-picker"  v-model="date">{{ date }}</VueDatePicker>
+                    </div>
                 </div>
               </div>
             </div>
@@ -79,10 +84,12 @@
   import Checkbox from '@/Components/Checkbox.vue';
   import SmallCheckbox from '@/Components/SmallCheckbox.vue';
   import TaskField from '@/Components/TaskField.vue';
-  import {reactive, onMounted, ref, defineEmits, getCurrentInstance} from 'vue';
+  import {reactive, onMounted, ref, watch} from 'vue';
   import { Inertia } from "@inertiajs/inertia";
   import { router } from '@inertiajs/vue3';
   import useSaveTask from "@/Composables/useSaveTask";
+  import VueDatePicker from '@vuepic/vue-datepicker';
+  import '@vuepic/vue-datepicker/dist/main.css'
   
   export default {
     props: {
@@ -110,12 +117,13 @@
       Checkbox,
       TaskField,
       SmallCheckbox,
+      VueDatePicker,
       XCircleIcon
     },
     emits: ['taskComplete'],
     setup(props) {
       let activeTask = reactive(props.task);
-      let dueDate = ref('');
+      let date = ref(props.task.due_date);
       let newComment = ref('');
       let timePieces = ref(props.datetime_pieces);
       let toggleSubTask = ref(false);
@@ -123,9 +131,7 @@
 
       const { saveTask } = useSaveTask();
      
-
-
-      onMounted(() => {
+      watch(date, (newDate) => {
         setDueDate();
       })
 
@@ -154,7 +160,8 @@
       }
 
       function setDueDate() {
-        console.log('time: ', timePieces.value);
+        let params = {...activeTask, due_date: date.value};
+        router.post('/Checklist/Update', params);
       }
   
       function toggleSubTaskField() {
@@ -180,16 +187,18 @@
         activeTask.task_completed = !activeTask.task_completed;
        
         let params = activeTask;
-        router.post('/WorkChecklist/Update' , params);
+        router.post('/Checklist/Update' , params);
       }
   
       return {
         activeTask,
+        date,
         deleteSubTask,
         handleSaveTask,
         newComment,
         saveTask,
         saveComment,
+        setDueDate,
         toggleSubTaskField,
         toggleSubTask,
         toggleTaskComplete,
@@ -212,7 +221,11 @@
       justify-content: center;
       align-items: center;
     }
-  
+
+    /* .date-picker{
+      width: 45px;
+    }
+   */
     #modal-body { 
       height: 70%;
       min-width: 700px;

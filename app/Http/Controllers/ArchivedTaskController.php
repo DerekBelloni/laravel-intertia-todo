@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 use App\Models\ArchivedTask;
-use App\Models\WorkCheckList;
+use App\Models\CheckList;
 
 class ArchivedTaskController extends Controller  
 {
