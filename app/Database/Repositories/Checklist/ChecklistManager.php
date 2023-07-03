@@ -4,6 +4,7 @@ namespace App\Database\Repositories\Checklist;
 
 use Illuminate\Http\Request;
 use App\Models\CheckList;
+use App\Models\Project;
 use Inertia\Inertia;
 use Carbon\Carbon;
 
@@ -13,8 +14,11 @@ class CheckListManager
   {
     $tasks = CheckList::with(['subTasks', 'comments'])->where('user_id', Auth()->id())
     ->get(); 
+
+    $projects = Project::where('user_id', Auth()->id())->get();
     
     return Inertia::render('Checklist', [
+        "projects" => $projects,
         "tasks" => $tasks
     ]);
   }

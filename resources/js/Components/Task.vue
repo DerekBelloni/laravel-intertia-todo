@@ -27,7 +27,7 @@
         </div>
         </div>
       </div>
-      <Modal :task="task" :key="task.id" v-show="isModalVisible" @toggleModal="closeModal()"></Modal>
+      <Modal :projects="projects" :task="task" :key="task.id" v-show="isModalVisible" @toggleModal="closeModal()"></Modal>
     </div>
   </div>
 </template>
@@ -50,6 +50,10 @@ import { router } from '@inertiajs/vue3';
 
 export default {
   props: {
+    projects: {
+      type: Array,
+      required: true
+    },      
     task: {
       type: Object,
       required: true

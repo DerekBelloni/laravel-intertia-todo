@@ -4,8 +4,9 @@ namespace App\Database\Repositories\Dashboard;
 
 use Illuminate\Http\Request;
 use App\Models\User;
-use App\Models\CheckList;
 use Inertia\Inertia;
+use App\Models\CheckList;
+use App\Models\Project;
 use Carbon\Carbon;
 
 class DashboardManager
@@ -15,7 +16,7 @@ class DashboardManager
     $user = Auth()->user();
    
     $tasks = CheckList::where('user_id', Auth()->id())->get();
-    // dd($tasks);
+    
     $incomplete_tasks = 0;
 
     foreach ($tasks as $task) {
@@ -23,6 +24,8 @@ class DashboardManager
         $incomplete_tasks++;
       }
     }
+
+    $projects = Project::where('user_id', Auth()->id())->get();
 
     $current_date = Carbon::now()->tz('America/Denver');
 
@@ -48,12 +51,12 @@ class DashboardManager
       'month' => $month,
       'date' => $date
     ];
-  
-    // dd($user);
+
     return Inertia::render('Dashboard', [
       "user" => $user,
       "incomplete_tasks" => $incomplete_tasks,
       "datetime_pieces" => $datetime_pieces,
+      "projects" => $projects,
       "tasks" => $tasks,
       "time_of_day" => $time_of_day
     ]);

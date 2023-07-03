@@ -1,7 +1,7 @@
 <template>
   <Navbar>
-    <div id="task-container">
-      <div class="">
+    <div id="task-container mx-auto">
+      <div>
         <div class="grow ml-8">
         <div class="ml-2 space-y-4">
           <div class="grid grid-cols-12 h-full">
@@ -9,7 +9,7 @@
               <div class="flex mt-8 text-lg px-2 items-center flex-row space-x-2 mb-6">
                 <span class="font-semibold ml-4 text-gray-500">Tasks</span>
               </div>
-              <Task :task="task" v-for="task in tasks" :key="task.id" @opening:modal="toggleTaskField($event)"></Task>
+              <Task :projects="projects" :task="task" v-for="task in tasks" :key="task.id" @opening:modal="toggleTaskField($event)"></Task>
               <div class="mt-2 ml-6">
                 <a class="rounded p-1 cursor-pointer font-semibold text-gray-400 hover:text-rose-500" @click="toggleTaskField()">Add Task +</a>
               </div>
@@ -43,6 +43,10 @@ import { router } from '@inertiajs/vue3';
 
 export default {
   props: {
+    projects: {
+      type: Array,
+      required: false
+    },
     tasks: {
       type: Array,
       required: true

@@ -26,13 +26,12 @@
              </li>
            </ul>
          </li>
-         <li class="-mx-6 mt-auto">
+         <!-- <li class="-mx-6 mt-auto">
            <a href="#" class="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-100">
-             <!-- <img class="h-8 w-8 rounded-full bg-gray-50" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" /> -->
              <span class="sr-only">Your profile</span>
              <span aria-hidden="true">Derek Belloni</span>
            </a>
-         </li>
+         </li> -->
        </ul>
      </nav>
    </div>
@@ -48,21 +47,13 @@
    DocumentDuplicateIcon,
    FolderIcon,
    HomeIcon,
+   RectangleStackIcon,
    UsersIcon,
  } from '@heroicons/vue/24/outline'
  
  const navigation = [
-   { name: 'Dashboard', href: '#', icon: HomeIcon, current: true },
-   {
-     name: 'Teams',
-     icon: UsersIcon,
-     current: false,
-     children: [
-       { name: 'Engineering', href: '#' },
-       { name: 'Human Resources', href: '#' },
-       { name: 'Customer Success', href: '#' },
-     ],
-   },
+   { name: 'Dashboard', href: '/Dashboard', icon: HomeIcon, current: true },
+   { name: 'Tasks', href: '/Checklist', icon: RectangleStackIcon, current: true},
    {
      name: 'Projects',
      icon: FolderIcon,
@@ -74,6 +65,16 @@
        { name: 'New Customer Portal', href: '#' },
      ],
    },
+   {
+     name: 'Teams',
+     icon: UsersIcon,
+     current: false,
+     children: [
+       { name: 'Engineering', href: '#' },
+       { name: 'Human Resources', href: '#' },
+       { name: 'Customer Success', href: '#' },
+     ],
+   },
    { name: 'Calendar', href: '#', icon: CalendarIcon, current: false },
    { name: 'Documents', href: '#', icon: DocumentDuplicateIcon, current: false },
    { name: 'Reports', href: '#', icon: ChartPieIcon, current: false },
@@ -83,5 +84,6 @@
  <style>
    .sidebar {
       width: 15%;
+      height: 100vh;
    }
 </style>

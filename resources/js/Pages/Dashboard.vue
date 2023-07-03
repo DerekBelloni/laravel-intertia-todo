@@ -18,7 +18,7 @@
                   <p class="font-bold text-gray-600">{{ incomplete_tasks }} tasks</p>
                 </div>
                 <div class="flex justify-center">
-                  <p class="font-bold text-gray-600">0 projects</p>
+                  <p class="font-bold text-gray-600">{{ projects.length}} project(s)</p>
                 </div>
               </div>
             </div>
@@ -59,7 +59,16 @@
                     <font-awesome-icon :icon="['fas', 'circle-plus']" />
                   </a>
                 </div>
-                <div v-if="!projectInput" class="ml-4 text-center my-4">
+                <div v-if="projects.length">
+                  <div v-for="project in projects">
+                    <div class="ml-4 border-b border-gray-200 py-1 flex items-center justify-between">
+                      <span class="text-gray-600 font-semibold truncate overflow-hidden">
+                        {{ project.project_name }}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div v-else class="ml-4 text-center my-4">
                   <span class="text-gray-600 font-semibold">You currently have no projects. Get started!</span>
                 </div>
                 <div v-if="projectInput" class="flex flex-row ml-4 items-center border-b pb-2">
@@ -109,6 +118,10 @@ export default{
       type: Number,
       required: true
     },
+    projects: {
+      type: Array,
+      required: false
+    },  
     tasks: {
       type: Array,
       required: true
@@ -152,6 +165,7 @@ export default{
         projectName: projectName.value
       }
       router.post('/Project/Store', params);
+      projectName.value = '';
     }
 
     function handleEmit($event) {
