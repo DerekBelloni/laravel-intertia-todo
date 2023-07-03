@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white min-h-screen fixed top-0 z-50 w-full">
+  <div class="bg-white min-h-screen top-0 z-50 w-full">
   <div id="navbar" class="bg-rose-600">
     <div class="ml-4 pb-2 pt-4 flex flex-row space-x-2 items-center">
       <FireIcon class="w-6 h-6 text-white"></FireIcon>
@@ -14,7 +14,8 @@
         <Link href="/ArchivedTask" class="font-semibold text-white">Archive</Link>
      </div>
     </div>
-      <SidePanel v-if="toggled"></SidePanel>
+      <!-- <SidePanel v-if="toggled"></SidePanel> -->
+      <SidePanelTwo v-if="toggled"></SidePanelTwo>
   </div>
   <slot></slot>
 </div>
@@ -38,6 +39,7 @@
     components: {
       Link,
       SidePanel,
+      SidePanelTwo,
       FireIcon,
       Bars3Icon,
       MagnifyingGlassIcon,

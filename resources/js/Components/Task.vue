@@ -20,7 +20,7 @@
           <span class="text-xs text-gray-400">{{ task.created_at }}</span>
         </div>
         <div class="flex justify-end mt-6 text-xs items-center space-x-2 pr-3 hover:bg-gray-300 hover:rounded hover:px-1 hover:py-1 hover:text-white">
-          <label for="my-modal-5"><PencilSquareIcon class="h-6 w-6 text-gray-400 hover:bg-gray-400 hover:text-white rounded px-1" @click="showModal(task)"></PencilSquareIcon></label>
+          <label for="my-modal-5"><PencilSquareIcon class="h-6 w-6 text-gray-400 hover:bg-gray-400 hover:text-white rounded px-1" @click="handleClick(task, flag)"></PencilSquareIcon></label>
           <a class="hover:bg-gray-400 px-1 rounded" :class="task.task_completed ? 'cursor-pointer font-medium text-gray-400 hover:text-white' : 'cursor-pointer pr-2 font-medium text-gray-400 hover:text-white'" @click="archiveTask(task)"><span >Archive Task</span></a>
           <div class="flex justify-end" v-if="task.task_completed">
           <a @click="deleteTask(task)"><XCircleIcon class="h-6 w-6 text-gray-200 cursor-pointer hover:text-red-500 flex"></XCircleIcon></a>
@@ -67,7 +67,8 @@ export default {
     TaskField,
     XCircleIcon,
 },
-  setup(props) {
+emits: ['opening:modal'],
+  setup(props, ctx) {
     let activeTask = reactive(props.task);
     let checked = ref(false);
     let completedTasks = [];
@@ -76,6 +77,7 @@ export default {
     let taskBody = '';
     let toggleTask = ref(false);
     let workTasks = ref([]);
+    let flag = "task";
     let value = null;
     
 
@@ -99,6 +101,12 @@ export default {
       this.workTasks = workTasksD.filter(t => t.id != taskToDelete.id);
       router.post('/Checklist/Delete',  params);
     }
+
+    function handleClick(task, flag) {
+      console.log('in task, flag: ', flag)
+      ctx.emit('opening:modal', flag);
+      showModal(task)
+    }
     
     function saveTask(task) {
       let params = {
@@ -109,7 +117,7 @@ export default {
 
     function showModal(task) {
       activeTask = task;
-      this.isModalVisible = true;
+      isModalVisible.value = true;
     }
     
     
@@ -131,6 +139,8 @@ export default {
       closeModal,
       completedTasks,
       deleteTask,
+      handleClick,
+      flag,
       isActive,
       isModalVisible,
       saveTask,

@@ -1,9 +1,9 @@
 <template>
     <div class="modal-backdrop">
-      <div id="modal-body" class="rounded max-w-xl bg-gray-100">
+      <div id="modal-body" class="rounded max-w-xl bg-white">
         <header class="modal-header">
           <slot name="header">
-            <div class="border-b py-2 px-2 flex items-center justify-between my-1">
+            <div class="shadow py-2 px-2 flex items-center justify-between my-1">
               <div>
                 <button @click="$emit('taskComplete')" :class="!activeTask.task_completed ? 'ml-6 rounded px-2 py-1 text-gray-400 hover:border-emerald-500 hover:border-2 hover:bg-emerald-400 border hover:opacity-50 hover:text-emerald-100 text-xs' : 'ml-6 rounded px-2 py-1 border-emerald-500 border-2 bg-emerald-400  opacity-50 text-emerald-100 text-xs'">
                   <template v-if="activeTask.task_completed">
@@ -26,8 +26,9 @@
             <!--Grid-->
             <div class="space-y-4">
               <div class="grid grid-cols-12">
-                <div class=" mt-2 ml-6 mr-10 pb-2 col-span-12">
-                  <div class="text-gray-500 text-xl font-semibold"  :class="activeTask.task_completed ? 'line-through text-gray-400' : ''">
+                <div class=" mt-2 ml-6 mr-10 pb-2 col-span-12 flex flex-row items-center">
+                  <span class="text-gray-500 font-medium">Description</span>
+                  <div class="text-gray-500 font-normal ml-6 text-sm"  :class="activeTask.task_completed ? 'line-through text-gray-400' : ''">
                     <span>{{ activeTask.checklist_item_body }}</span>
                   </div>
                 </div>
@@ -53,6 +54,9 @@
                     </div>
                 </div>
               </div>
+            </div>
+            <div class="m-4">
+              <TaskField></TaskField>
             </div>
             
             <!-- <div class="grid grid-cols-10 border-t mt-16">
@@ -228,7 +232,8 @@
    */
     #modal-body { 
       height: 70%;
-      min-width: 700px;
+      min-width: 55%;
+      z-index: 1;
     }
 
     #bottom {
