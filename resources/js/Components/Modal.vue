@@ -32,12 +32,12 @@
                     <span>{{ activeTask.checklist_item_body }}</span>
                   </div>
                 </div>
-                <div class="col-span-4 mt-2">
-                  <div class="flex flex-row justify-between items-center">
+                <div class=" mt-2">
+                  <div class="flex flex-row items-center col-span-12">
                     <div class="ml-6">
                       <span class="font-medium text-gray-500">Assignee</span>
                     </div>
-                    <div>
+                    <div class="ml-20">
                       <span class="font-medium text-gray-500">{{ user?.name }}</span>
                     </div>
                   </div>
@@ -49,7 +49,6 @@
                       <span class="font-medium text-gray-500">Due Date</span>
                     </div>
                     <div class="ml-20">
-                      <!-- <VueDatePicker :model-value="activeTask.due_date" class="date-picker" v-if="!activeTask.due_date" v-model="date">{{ date }}</VueDatePicker> -->
                       <VueDatePicker class="date-picker"  v-model="date">{{ date }}</VueDatePicker>
                     </div>
                 </div>
@@ -60,13 +59,7 @@
                       <span class="font-medium text-gray-500">Project</span>
                     </div>
                     <div class="ml-24">
-                      <div>
-                        <select id="location" name="location" class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-rose-600 sm:text-sm sm:leading-6">
-                          <div v-for="project in activeProjects">
-                            <option>{{ project }}</option>
-                          </div>
-                        </select>
-                      </div>
+                      <Select :projects="projects"></Select>
                     </div>
                 </div>
               </div>
@@ -103,6 +96,7 @@
   import { XCircleIcon } from '@heroicons/vue/24/solid';
   import Checkbox from '@/Components/Checkbox.vue';
   import SmallCheckbox from '@/Components/SmallCheckbox.vue';
+  import Select from '@/Components/Select.vue';
   import TaskField from '@/Components/TaskField.vue';
   import {reactive, onMounted, ref, watch} from 'vue';
   import { Inertia } from "@inertiajs/inertia";
@@ -137,13 +131,13 @@
       }
     },
     components: {
-      xMarkIcon,
-      XMarkIcon,
       Checkbox,
-      TaskField,
+      Select,
       SmallCheckbox,
+      TaskField,
       VueDatePicker,
-      XCircleIcon
+      XCircleIcon,
+      XMarkIcon,
     },
     emits: ['taskComplete'],
     setup(props) {

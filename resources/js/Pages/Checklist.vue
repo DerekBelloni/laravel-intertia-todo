@@ -9,7 +9,7 @@
               <div class="flex mt-8 text-lg px-2 items-center flex-row space-x-2 mb-6">
                 <span class="font-semibold ml-4 text-gray-500">Tasks</span>
               </div>
-              <Task :projects="projects" :task="task" v-for="task in tasks" :key="task.id" @opening:modal="toggleTaskField($event)"></Task>
+              <Task :user="user" :projects="projects" :task="task" v-for="task in tasks" :key="task.id" @opening:modal="toggleTaskField($event)"></Task>
               <div class="mt-2 ml-6">
                 <a class="rounded p-1 cursor-pointer font-semibold text-gray-400 hover:text-rose-500" @click="toggleTaskField()">Add Task +</a>
               </div>
@@ -50,6 +50,10 @@ export default {
     tasks: {
       type: Array,
       required: true
+    },
+    user: {
+      type: Object,
+      required: false
     }
   },
   components: {

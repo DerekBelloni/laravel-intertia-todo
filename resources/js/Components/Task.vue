@@ -27,7 +27,7 @@
         </div>
         </div>
       </div>
-      <Modal :projects="projects" :task="task" :key="task.id" v-show="isModalVisible" @toggleModal="closeModal()"></Modal>
+      <Modal :user="user" :projects="projects" :task="task" :key="task.id" v-show="isModalVisible" @toggleModal="closeModal()"></Modal>
     </div>
   </div>
 </template>
@@ -55,6 +55,10 @@ export default {
       required: true
     },      
     task: {
+      type: Object,
+      required: true
+    },
+    user: {
       type: Object,
       required: true
     }
