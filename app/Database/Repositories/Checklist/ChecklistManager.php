@@ -47,8 +47,9 @@ class CheckListManager
 
     CheckList::where('id', $work_tasks["id"])
        ->update([
-          'task_completed'=> $work_tasks["task_completed"],
-          'due_date' => $due_date ?? null
+         'due_date' => $due_date ?? null,
+         'projects' => $work_tasks["projects"] ?? null,
+         'task_completed'=> $work_tasks["task_completed"],
        ]);
   }
 

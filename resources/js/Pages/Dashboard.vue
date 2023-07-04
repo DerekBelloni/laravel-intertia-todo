@@ -85,6 +85,7 @@
           :task="activeTask" 
           :user="user" 
           :datetime_pieces="datetime_pieces" 
+          :projects="projects"
           v-show="isModalVisible"
           @toggleModal="closeModal()"
           @taskComplete="toggleTaskComplete(activeTask)"

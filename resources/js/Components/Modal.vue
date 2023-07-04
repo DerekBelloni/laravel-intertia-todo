@@ -58,8 +58,13 @@
                     <div class="ml-6">
                       <span class="font-medium text-gray-500">Project</span>
                     </div>
-                    <div class="ml-24">
-                      <Select :projects="projects"></Select>
+                    <div v-if="activeTask.projects" class="ml-24 font-medium text-gray-500">
+                      <span>{{ activeTask.projects }}</span>
+                    </div>
+                    <div v-else-if="!activeTask.projects" class="ml-24">
+                      <select class="rounded project-select"  v-model="selected"  @change="selectChange($event)">
+                          <option v-for="project in projects" :value="project.project_name">{{ project.project_name }}</option>
+                      </select>
                     </div>
                 </div>
               </div>
@@ -67,6 +72,7 @@
             <div class="m-4">
               <TaskField></TaskField>
             </div>
+          
             
             <!-- <div class="grid grid-cols-10 border-t mt-16">
               <div class="col-span-8">
@@ -96,7 +102,6 @@
   import { XCircleIcon } from '@heroicons/vue/24/solid';
   import Checkbox from '@/Components/Checkbox.vue';
   import SmallCheckbox from '@/Components/SmallCheckbox.vue';
-  import Select from '@/Components/Select.vue';
   import TaskField from '@/Components/TaskField.vue';
   import {reactive, onMounted, ref, watch} from 'vue';
   import { Inertia } from "@inertiajs/inertia";
@@ -132,7 +137,6 @@
     },
     components: {
       Checkbox,
-      Select,
       SmallCheckbox,
       TaskField,
       VueDatePicker,
@@ -145,12 +149,12 @@
       let activeTask = reactive(props.task);
       let date = ref(props.task.due_date);
       let newComment = ref('');
-      let timePieces = ref(props.datetime_pieces);
       let toggleSubTask = ref(false);
+      let selected = ref('');
       let url = '/Subtask/Store';
 
       const { saveTask } = useSaveTask();
-     
+
       watch(date, (newDate) => {
         setDueDate();
       })
@@ -177,6 +181,11 @@
           "parent_task_id": activeTask.id
         }
         router.post('/Comments/Store', params);
+      }
+
+      function selectChange() {
+        let params = {...activeTask, projects: selected.value}
+        router.post('/Checklist/Update', params)
       }
 
       function setDueDate() {
@@ -219,6 +228,8 @@
         newComment,
         saveTask,
         saveComment,
+        selectChange,
+        selected,
         setDueDate,
         toggleSubTaskField,
         toggleSubTask,
@@ -260,6 +271,11 @@
 
     #main-content {
       height: 65%;
+    }
+
+    .project-select {
+      height: 32px;
+      width: 150px;
     }
 
   </style>
